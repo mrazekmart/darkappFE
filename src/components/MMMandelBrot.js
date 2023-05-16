@@ -1,12 +1,15 @@
-import React, {useEffect, useRef} from 'react';
+import React, {useContext, useEffect, useRef} from 'react';
 import { useNavigate } from 'react-router-dom';
 import shader from 'glslify';
+import {ZIndexContext} from "../ZIndexContext";
 
 const MMMandelBrot = () => {
     const canvasRef = useRef(null);
     const navigate = useNavigate();
+    const { setZIndex } = useContext(ZIndexContext);
 
     const navigateToUrl = () => {
+        setZIndex(-1);
         navigate("/");
     };
 

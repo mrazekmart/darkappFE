@@ -1,9 +1,9 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import MMDropdownMenu from "./MMDropDownMenu";
 import MMModal from "./MMModal";
 import MMRegister from "./login/MMRegister";
 import MMLogin from "./login/MMLogin";
-import MMMandelBrot from "./MMMandelBrot";
+import {ZIndexContext} from "../ZIndexContext";
 
 const MMBody = () => {
     const [registerShow, setRegisterShow] = useState(false);
@@ -16,6 +16,8 @@ const MMBody = () => {
         setRegisterShow(false);
         setLoginShow(true)
     };
+
+    const { setZIndex } = useContext(ZIndexContext);
 
     return (
         <div className="d-flex flex-wrap mmBtn-container">
@@ -37,7 +39,7 @@ const MMBody = () => {
                 <MMDropdownMenu
                     title="Fractals"
                     menuItems={[
-                        {label: 'Mandelbrot set', path: '/fractals/mandelbrot'},
+                        {label: 'Mandelbrot set', onClick: () => setZIndex(10)},
                     ]}
                 />
                 <MMDropdownMenu

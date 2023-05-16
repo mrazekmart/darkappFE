@@ -1,4 +1,5 @@
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
+import {useState} from 'react';
 import './App.css';
 import Header from './components/MMheader';
 import Footer from './components/MMfooter';
@@ -7,27 +8,31 @@ import MMSorting from "./components/MMSorting";
 import MMPerlinNoise from "./components/MMNoises";
 import MMConquerorGame from "./components/MMConquerorGame";
 import MMMandelBrot from "./components/MMMandelBrot";
+import {ZIndexContext} from './ZIndexContext';
 import React from "react";
 
 function App() {
+    const [zIndex, setZIndex] = useState(-1);
+
     return (
         <Router>
-            <div className="backgroundComponent">
-                <MMMandelBrot/>
-            </div>
-            <div className="container">
-                <Header/>
-                <div className="content-wrapper">
-                    <MMBody/>
-                    <Routes>
-                        <Route path="/sorting/bubblesort" element={<MMSorting/>}/>
-                        <Route path="/noises/perlin" element={<MMPerlinNoise/>}/>
-                        <Route path="/games" element={<MMConquerorGame/>}/>
-                        <Route path="/fractals/mandelbrot" element={<MMMandelBrot/>}/>
-                    </Routes>
+            <ZIndexContext.Provider value={{zIndex, setZIndex}}>
+                <div className="backgroundComponent" style={{zIndex: zIndex}}>
+                    <MMMandelBrot/>
                 </div>
-                <Footer/>
-            </div>
+                <div className="container">
+                    <Header/>
+                    <div className="content-wrapper">
+                        <MMBody/>
+                        <Routes>
+                            <Route path="/sorting/bubblesort" element={<MMSorting/>}/>
+                            <Route path="/noises/perlin" element={<MMPerlinNoise/>}/>
+                            <Route path="/games" element={<MMConquerorGame/>}/>
+                        </Routes>
+                    </div>
+                    <Footer/>
+                </div>
+            </ZIndexContext.Provider>
         </Router>
     );
 }
