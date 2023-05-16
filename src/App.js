@@ -7,11 +7,14 @@ import MMSorting from "./components/MMSorting";
 import MMPerlinNoise from "./components/MMNoises";
 import MMConquerorGame from "./components/MMConquerorGame";
 import MMMandelBrot from "./components/MMMandelBrot";
-
+import React from "react";
 
 function App() {
     return (
         <Router>
+            <div className="backgroundComponent">
+                <MMMandelBrot/>
+            </div>
             <div className="container">
                 <Header/>
                 <div className="content-wrapper">

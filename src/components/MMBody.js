@@ -3,6 +3,7 @@ import MMDropdownMenu from "./MMDropDownMenu";
 import MMModal from "./MMModal";
 import MMRegister from "./login/MMRegister";
 import MMLogin from "./login/MMLogin";
+import MMMandelBrot from "./MMMandelBrot";
 
 const MMBody = () => {
     const [registerShow, setRegisterShow] = useState(false);

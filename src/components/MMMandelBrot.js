@@ -1,12 +1,42 @@
 import React, {useEffect, useRef} from 'react';
+import { useNavigate } from 'react-router-dom';
 import shader from 'glslify';
 
 const MMMandelBrot = () => {
     const canvasRef = useRef(null);
+    const navigate = useNavigate();
+
+    const navigateToUrl = () => {
+        navigate("/");
+    };
+
+    useEffect(() => {
+        const handleKeyDown = (event) => {
+            if (event.key === 'Escape') {
+                navigateToUrl();
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+        };
+    }, []);
 
     useEffect(() => {
         const canvas = canvasRef.current;
         const gl = canvas.getContext('webgl2');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const resizeCanvas = () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            draw();
+        };
+        window.addEventListener('resize', resizeCanvas);
 
         const vertexShader = `#version 300 es
           in vec2 position;
@@ -35,13 +65,13 @@ const MMMandelBrot = () => {
             for (int i = 0; i < 1000; ++i) {
               if (length(z) > 400.0) {
                 float color = float(i) / 100.0;
-                fragColor = vec4(vec3(1.0, color, 1.0), 1.0);
+                fragColor = vec4(vec3(0.2, 0.1, color), 1.0);
                 return;
               }
               z = complexMul(z, z) + c;
             }
         
-            fragColor = vec4(1.0, 0.0, 0.0, 1.0);
+            fragColor = vec4(0.4, 0.8, 0.4, 1.0);
           }
         `);
 
@@ -55,8 +85,9 @@ const MMMandelBrot = () => {
         gl.enableVertexAttribArray(positionAttributeLocation);
         gl.vertexAttribPointer(positionAttributeLocation, 2, gl.FLOAT, false, 0, 0);
 
-        let zoom = 200.0;
-        let center = [0.0, 0.0];
+        let zoom = 35000;
+        let center = [-0.7020262791510383, 0.36030954333341126];
+        ;
 
         const draw = () => {
             const resolutionUniformLocation = gl.getUniformLocation(program, 'resolution');
@@ -75,6 +106,8 @@ const MMMandelBrot = () => {
         const handleWheel = (event) => {
             event.preventDefault();
             zoom *= 1.0 - event.deltaY * 0.001;
+            console.log(zoom);
+            console.log(center);
             draw();
         };
 
@@ -88,7 +121,9 @@ const MMMandelBrot = () => {
         };
 
         const handleMouseMove = (event) => {
-            if (!isDragging) return;
+            if (!isDragging) {
+                return;
+            }
 
             const dx = (event.clientX - prevMousePos.x) / zoom;
             const dy = (event.clientY - prevMousePos.y) / zoom;
@@ -114,6 +149,8 @@ const MMMandelBrot = () => {
         draw();
 
         return () => {
+            window.removeEventListener('resize', resizeCanvas);
+
             canvas.removeEventListener('wheel', handleWheel);
             canvas.removeEventListener('mousedown', handleMouseDown);
             canvas.removeEventListener('mousemove', handleMouseMove);
@@ -121,12 +158,11 @@ const MMMandelBrot = () => {
         };
     }, []);
 
-    return(
-        <div className="mmContainer">
-            <div className="mmContainerTop">
-                <canvas ref={canvasRef} width={400} height={400}/>
-            </div>
-        </div>);
+    return (
+        <div>
+            <canvas ref={canvasRef} style={{ position: 'absolute', top: 0, left: 0 }}/>
+        </div>
+    );
 };
 
 function createProgram(gl, vertexShaderSource, fragmentShaderSource) {

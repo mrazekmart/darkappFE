@@ -1,3 +1,12 @@
+.backgroundComponent {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+}
+
 /* !!! LOGIN FORM !!! */
 .mmRegisterForm {
     display: flex;
@@ -63,9 +72,9 @@
 
 /* !!! TITLE STYLE !!! */
 .mmTitle-container {
-    background-image: linear-gradient(to right, #7db9e8, #1e5799);
+    /*background-image: linear-gradient(to right, #7db9e8, #1e5799);
     background-repeat: no-repeat;
-    background-size: cover;
+    background-size: cover;*/
     padding: 20px;
     text-align: center;
 }
@@ -74,7 +83,7 @@
     font-family: 'Roboto', sans-serif;
     font-size: 24px;
     font-weight: 400;
-    color: #00695c;
+    color: #58ffe3;
     margin: 0;
     padding: 10px;
 }
@@ -83,7 +92,7 @@
     font-family: 'Roboto', sans-serif;
     font-size: 48px;
     font-weight: 700;
-    color: #004d40;
+    color: #58ffe3;
     margin: 0;
     padding: 10px;
 }
@@ -92,9 +101,9 @@
 
 /* !!! BUTTONS UNDER TITLE !!! */
 .mmBtn-container {
-    background-image: linear-gradient(to right, #7db9e8, #1e5799);
+    /*background-image: linear-gradient(to right, #7db9e8, #1e5799);
     background-repeat: no-repeat;
-    background-size: cover;
+    background-size: cover;*/
     padding: 20px;
     text-align: center;
     position: relative;
@@ -181,7 +190,7 @@
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    background-color: #dceaf5;
+    /*background-color: #dceaf5;*/
 }
 
 .content-wrapper {
@@ -200,6 +209,7 @@
 }
 
 .mmContainerDown {
+    /*background-color: #dceaf5;*/
     display: flex;
     flex-direction: column;
     flex: 1;
@@ -213,7 +223,7 @@
 }
 
 .mmContainerTop {
-    background-color: #dceaf5;
+    /*background-color: #dceaf5;*/
     display: flex;
     flex: 1;
     justify-content: center;
