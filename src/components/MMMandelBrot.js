@@ -69,12 +69,14 @@ const MMMandelBrot = () => {
               if (length(z) > 400.0) {
                 float color = float(i) / 100.0;
                 fragColor = vec4(vec3(0.2, 0.1, color), 1.0);
+                //fragColor = vec4(vec3(0.0, 0.0, 0.0), 1.0);
                 return;
               }
               z = complexMul(z, z) + c;
             }
         
             fragColor = vec4(0.4, 0.8, 0.4, 1.0);
+            //fragColor = vec4(1.0, 1.0, 1.0, 1.0);
           }
         `);
 

@@ -82,6 +82,7 @@
 .mmSubTitle {
     font-family: 'Roboto', sans-serif;
     font-size: 24px;
+    -webkit-text-stroke: 1px black;
     font-weight: 400;
     color: #58ffe3;
     margin: 0;
@@ -91,6 +92,7 @@
 .mmTitle {
     font-family: 'Roboto', sans-serif;
     font-size: 48px;
+    -webkit-text-stroke: 1px black;
     font-weight: 700;
     color: #58ffe3;
     margin: 0;
