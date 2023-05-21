@@ -3,7 +3,7 @@ import MMDropdownMenu from "./MMDropDownMenu";
 import MMModal from "./MMModal";
 import MMRegister from "./login/MMRegister";
 import MMLogin from "./login/MMLogin";
-import {ZIndexContext} from "../ZIndexContext";
+import {BackGroundContext} from "../BackGroundContext";
 
 const MMBody = () => {
     const [registerShow, setRegisterShow] = useState(false);
@@ -17,7 +17,11 @@ const MMBody = () => {
         setLoginShow(true)
     };
 
-    const { setZIndex } = useContext(ZIndexContext);
+    const successfulLogin = () => {
+        handleLoginClose();
+    }
+
+    const { setZIndex } = useContext(BackGroundContext);
 
     return (
         <div className="d-flex flex-wrap mmBtn-container">
@@ -54,14 +58,14 @@ const MMBody = () => {
                 <button className="mmScience-btn mmRegisterButton" onClick={handleLoginShow}>Login</button>
             </div>
             <MMModal show={registerShow} handleClose={handleRegisterClose}>
-                <MMRegister/>
+                <MMRegister handleClose={handleRegisterClose}/>
                 <div className="flex-direction-row flex-justify-content-center">
                     <p>Already registered?</p>
                     <button className="mmScience-btn mmRegisterToLoginButton" onClick={switchToLogin}>Login</button>
                 </div>
             </MMModal>
             <MMModal show={loginShow} handleClose={handleLoginClose}>
-                <MMLogin/>
+                <MMLogin successfullLogin={successfulLogin}/>
             </MMModal>
         </div>
     );

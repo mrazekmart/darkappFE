@@ -1,12 +1,13 @@
 import React, {useContext, useEffect, useRef} from 'react';
 import { useNavigate } from 'react-router-dom';
 import shader from 'glslify';
-import {ZIndexContext} from "../ZIndexContext";
+import {BackGroundContext} from "../BackGroundContext";
 
 const MMMandelBrot = () => {
     const canvasRef = useRef(null);
     const navigate = useNavigate();
-    const { setZIndex } = useContext(ZIndexContext);
+    const { setZIndex } = useContext(BackGroundContext);
+    const {color, setColor} = useContext(BackGroundContext);
 
     const navigateToUrl = () => {
         setZIndex(-1);
@@ -53,6 +54,7 @@ const MMMandelBrot = () => {
           uniform vec2 resolution;
           uniform float zoom;
           uniform vec2 center;
+          uniform vec3 color;
           out vec4 fragColor;
         
           vec2 complexMul(vec2 a, vec2 b) {
@@ -69,13 +71,14 @@ const MMMandelBrot = () => {
               if (length(z) > 400.0) {
                 float color = float(i) / 100.0;
                 fragColor = vec4(vec3(0.2, 0.1, color), 1.0);
+                //fragColor = vec4(color, 1.0);
                 //fragColor = vec4(vec3(0.0, 0.0, 0.0), 1.0);
                 return;
               }
               z = complexMul(z, z) + c;
             }
         
-            fragColor = vec4(0.4, 0.8, 0.4, 1.0);
+            fragColor = vec4(color, 1.0);
             //fragColor = vec4(1.0, 1.0, 1.0, 1.0);
           }
         `);
@@ -98,10 +101,12 @@ const MMMandelBrot = () => {
             const resolutionUniformLocation = gl.getUniformLocation(program, 'resolution');
             const zoomUniformLocation = gl.getUniformLocation(program, 'zoom');
             const centerUniformLocation = gl.getUniformLocation(program, 'center');
+            const colorUniformLocation = gl.getUniformLocation(program, 'color');
 
             gl.uniform2f(resolutionUniformLocation, canvas.width, canvas.height);
             gl.uniform1f(zoomUniformLocation, zoom);
             gl.uniform2f(centerUniformLocation, center[0], center[1]);
+            gl.uniform3f(colorUniformLocation, color[0], color[1], color[2]);
 
             gl.viewport(0, 0, canvas.width, canvas.height);
             gl.clear(gl.COLOR_BUFFER_BIT);
@@ -161,7 +166,7 @@ const MMMandelBrot = () => {
             canvas.removeEventListener('mousemove', handleMouseMove);
             canvas.removeEventListener('mouseup', handleMouseUp);
         };
-    }, []);
+    }, [color]);
 
     return (
         <div>

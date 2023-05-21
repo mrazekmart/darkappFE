@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import axios from 'axios';
 
-const MMRegister = () => {
+const MMRegister = ({handleClose}) => {
     const [email, setEmail] = useState("");
-    const [name, setName] = useState("");
+    const [userName, setUserName] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(null);
@@ -14,8 +14,9 @@ const MMRegister = () => {
         setSuccess(null);
 
         try {
-            await axios.post("/api/auth/register", { email, name, password });
+            await axios.post("/api/auth/register", {userName: userName, email: email, password: password});
             setSuccess('Registration successful');
+            handleClose();
         } catch (error) {
             if (error.response && error.response.status === 409) {
                 setError('Email is already registered');
@@ -36,8 +37,8 @@ const MMRegister = () => {
             />
             <input
                 type="text"
-                value={name}
-                onChange={e => setName(e.target.value)}
+                value={userName}
+                onChange={e => setUserName(e.target.value)}
                 placeholder="Username"
             />
             <input

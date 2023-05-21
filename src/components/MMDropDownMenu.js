@@ -16,7 +16,7 @@ const MMDropdownMenu = ({title, menuItems}) => {
                         );
                     } else if (item.onClick) {
                         return (
-                            <button key={index} onClick={item.onClick} className="mmDropdown-item">
+                            <button key={index} onClick={item.onClick} className="mmScience-btn">
                                 {item.label}
                             </button>
                         );

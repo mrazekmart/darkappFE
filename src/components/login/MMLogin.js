@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import axios from 'axios';
 
-const MMLogin = () => {
-    const [name, setName] = useState("");
+const MMLogin = ({successfullLogin}) => {
+    const [userName, setUserName] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(null);
@@ -13,11 +13,17 @@ const MMLogin = () => {
         setSuccess(null);
 
         try {
-            await axios.post("/api/auth/login", { name, password });
+            const response = await axios.post("/api/auth/login", {userName: userName, password: password});
             setSuccess('Login successful');
+            if (response.data) {
+                const token = response.data.token;
+                localStorage.setItem('jwt', token);
+            }
+            successfullLogin();
         } catch (error) {
+            console.log(error);
             if (error.response && error.response.status === 409) {
-                setError('Email is already registered');
+                setError(error.response.data);
             } else {
                 setError('Something went wrong');
             }
@@ -29,8 +35,8 @@ const MMLogin = () => {
             <h2>Login</h2>
             <input
                 type="text"
-                value={name}
-                onChange={e => setName(e.target.value)}
+                value={userName}
+                onChange={e => setUserName(e.target.value)}
                 placeholder="Username"
             />
             <input
