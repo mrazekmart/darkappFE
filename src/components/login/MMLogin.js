@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import axios from 'axios';
 
-const MMLogin = ({successfullLogin}) => {
+const MMLogin = ({successfulLogin}) => {
     const [userName, setUserName] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState(null);
@@ -19,7 +19,7 @@ const MMLogin = ({successfullLogin}) => {
                 const token = response.data.token;
                 localStorage.setItem('jwt', token);
             }
-            successfullLogin();
+            successfulLogin();
         } catch (error) {
             console.log(error);
             if (error.response && error.response.status === 409) {

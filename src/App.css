@@ -206,11 +206,15 @@
 }
 
 .mmContainer {
-    display: flex;
     flex-direction: column;
     margin-top: 10px;
+    backdrop-filter: blur(3px);
+    background-color: rgba(168, 69, 79, 0.6);
+    display: inline-block;
 }
-
+.mmContainerWrapper{
+    text-align: center;
+}
 .mmContainerDown {
     /*background-color: #dceaf5;*/
     display: flex;
@@ -250,9 +254,29 @@
 }
 
 .mmPerlinSlider {
-    width: 250px;
+    width: 100%;
+    height: 15px;
+    -webkit-appearance: none;
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+    margin-top: 2px;
+    margin-left: 0px;
 }
 
+.mmPerlinSlider:hover {
+    opacity: 1;
+}
+
+.mmPerlinSlider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 10px;
+    height: 10px;
+    background: white;
+    cursor: pointer;
+}
 .mmInput {
     margin: 2px 20px;
     height: 22px;
@@ -288,7 +312,7 @@
 .mmLabel {
     margin: 2px 20px;
     font-size: 16px;
-    text-align: left;
+    text-align: center;
     margin-block-start: 10px;
     margin-block-end: 10px;
 }
@@ -322,10 +346,22 @@
     display: flex;
     flex-direction: row;
 }
+.flex-direction-row-space-10{
+    gap: 10px;
+}
 .flex-direction-column{
     display: flex;
     flex-direction: column;
 }
 .flex-justify-content-center{
     justify-content: center;
+}
+.background-red{
+    background: red;
+}
+.background-green{
+    background: green;
+}
+.background-blue{
+    background: blue;
 }

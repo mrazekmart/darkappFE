@@ -1,27 +1,66 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import MMDropdownMenu from "./MMDropDownMenu";
 import MMModal from "./MMModal";
 import MMRegister from "./login/MMRegister";
 import MMLogin from "./login/MMLogin";
 import {BackGroundContext} from "../BackGroundContext";
+import axios from "axios";
 
 const MMBody = () => {
     const [registerShow, setRegisterShow] = useState(false);
     const [loginShow, setLoginShow] = useState(false);
+    const [logInOutButtonText, setLogInOutButtonText] = useState("Login");
+    const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
+    const {setZIndex} = useContext(BackGroundContext);
+    const {setColorFractal, setColorBackground, setPositionFractal} = useContext(BackGroundContext);
     const handleRegisterClose = () => setRegisterShow(false);
     const handleLoginClose = () => setLoginShow(false);
     const handleRegisterShow = () => setRegisterShow(true);
     const handleLoginShow = () => setLoginShow(true);
+
     const switchToLogin = () => {
         setRegisterShow(false);
         setLoginShow(true)
     };
-
     const successfulLogin = () => {
         handleLoginClose();
+        setIsUserLoggedIn(true);
+        getFractalInfo();
+    }
+    const successfulLogout = () => {
+        localStorage.removeItem('jwt');
+        setIsUserLoggedIn(false);
     }
 
-    const { setZIndex } = useContext(BackGroundContext);
+    const handleLogInOutButton = () => {
+        if (!isUserLoggedIn) {
+            handleLoginShow();
+        } else {
+            successfulLogout();
+        }
+    }
+
+    useEffect(() => {
+        if (isUserLoggedIn) {
+            setLogInOutButtonText("Logout");
+        } else {
+            setLogInOutButtonText("Login");
+        }
+    }, [isUserLoggedIn]);
+
+    const getFractalInfo = async () => {
+        const token = localStorage.getItem('jwt');
+        try {
+            const response = await axios.get("/api/user/getFractalInfo", { headers: { "Authorization": `Bearer ${token}` }});
+            if (response.data) {
+                setColorFractal(response.data.colorFractal);
+                setColorBackground(response.data.colorBackground);
+                setPositionFractal(response.data.positionFractal);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     return (
         <div className="d-flex flex-wrap mmBtn-container">
@@ -55,7 +94,8 @@ const MMBody = () => {
             </div>
             <div className="mmRegisterButtonsContainer">
                 <button className="mmScience-btn mmRegisterButton" onClick={handleRegisterShow}>Register</button>
-                <button className="mmScience-btn mmRegisterButton" onClick={handleLoginShow}>Login</button>
+                <button className="mmScience-btn mmRegisterButton"
+                        onClick={handleLogInOutButton}>{logInOutButtonText}</button>
             </div>
             <MMModal show={registerShow} handleClose={handleRegisterClose}>
                 <MMRegister handleClose={handleRegisterClose}/>
@@ -65,7 +105,7 @@ const MMBody = () => {
                 </div>
             </MMModal>
             <MMModal show={loginShow} handleClose={handleLoginClose}>
-                <MMLogin successfullLogin={successfulLogin}/>
+                <MMLogin successfulLogin={successfulLogin}/>
             </MMModal>
         </div>
     );

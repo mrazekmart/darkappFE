@@ -58,50 +58,56 @@ const MMPerlinNoise = () => {
 
 
     return (
-        <div className="mmContainer">
-            <div className="mmContainerTop">
-                <div>
-                    <p className="mmLabel">Perlin Scale</p>
-                    <input className="mmPerlinSlider"
-                           type="range"
-                           min="1"
-                           max="100"
-                           value={zoom}
-                           onChange={handleChange}
-                    />
+        <div className="mmContainerWrapper">
+            <div className="mmContainer">
+                <div className="mmContainerTop">
+                    <div className="flex-direction-column">
+                        <div>
+                            <p className="mmLabel">Perlin Scale</p>
+                            <input className="mmPerlinSlider background-green"
+                                   type="range"
+                                   min="1"
+                                   max="100"
+                                   value={zoom}
+                                   onChange={handleChange}
+                            />
+                        </div>
+                        <div>
+                            <p className="mmLabel">Perlin Density</p>
+                            <input className="mmPerlinSlider background-green"
+                                   type="range"
+                                   min="-100"
+                                   max="100"
+                                   value={density}
+                                   onChange={handleChange2}
+                            />
+                        </div>
+                    </div>
+                    <div className="flex-direction-column">
+                        <p className="mmLabel">X coordination OffSet</p>
+                        <input className="mmInput-box"
+                               type="text"
+                               value={xCoord}
+                               onChange={handleInputXCoord}
+                               placeholder="Set X coordination"
+                        />
+                        <p className="mmLabel">Y coordination OffSet</p>
+                        <input className="mmInput-box"
+                               type="text"
+                               value={yCoord}
+                               onChange={handleInputYCoord}
+                               placeholder="Set Y coordination"
+                        />
+                    </div>
                 </div>
-                <div>
-                    <p className="mmLabel">Perlin Density</p>
-                    <input className="mmPerlinSlider"
-                           type="range"
-                           min="-100"
-                           max="100"
-                           value={density}
-                           onChange={handleChange2}
-                    />
-                </div>
-                <p className="mmLabel">X coordination OffSet</p>
-                <input className="mmInput-box"
-                       type="text"
-                       value={xCoord}
-                       onChange={handleInputXCoord}
-                       placeholder="Set X coordination"
-                />
-                <p className="mmLabel">Y coordination OffSet</p>
-                <input className="mmInput-box"
-                       type="text"
-                       value={yCoord}
-                       onChange={handleInputYCoord}
-                       placeholder="Set Y coordination"
-                />
-            </div>
-            <div className="mmContainerDown">
-                {imageDataUrl ? (
-                    <img src={imageDataUrl} alt="Image from API" className="mmPerlinBox"/>
-                ) : (
-                    <p>Loading image...</p>
-                )}
+                <div className="mmContainerDown">
+                    {imageDataUrl ? (
+                        <img src={imageDataUrl} alt="Image from API" className="mmPerlinBox"/>
+                    ) : (
+                        <p>Loading image...</p>
+                    )}
 
+                </div>
             </div>
         </div>
     );

@@ -7,7 +7,7 @@ const MMMandelBrot = () => {
     const canvasRef = useRef(null);
     const navigate = useNavigate();
     const { setZIndex } = useContext(BackGroundContext);
-    const {color, setColor} = useContext(BackGroundContext);
+    const {colorFractal, colorBackground, positionFractal} = useContext(BackGroundContext);
 
     const navigateToUrl = () => {
         setZIndex(-1);
@@ -29,6 +29,11 @@ const MMMandelBrot = () => {
     }, []);
 
     useEffect(() => {
+
+        console.log(colorFractal);
+        console.log(colorBackground);
+        console.log(positionFractal);
+
         const canvas = canvasRef.current;
         const gl = canvas.getContext('webgl2');
 
@@ -54,7 +59,8 @@ const MMMandelBrot = () => {
           uniform vec2 resolution;
           uniform float zoom;
           uniform vec2 center;
-          uniform vec3 color;
+          uniform vec3 colorFractal;
+          uniform vec3 colorBackground;
           out vec4 fragColor;
         
           vec2 complexMul(vec2 a, vec2 b) {
@@ -62,23 +68,23 @@ const MMMandelBrot = () => {
           }
         
           void main() {
-            vec2 uv = (gl_FragCoord.xy - resolution * 0.5) / zoom + center;
-        
+            vec2 uv = (gl_FragCoord.xy - resolution * 0.5) / zoom + center;    
             vec2 z = vec2(0.0);
             vec2 c = uv;
         
             for (int i = 0; i < 1000; ++i) {
               if (length(z) > 400.0) {
                 float color = float(i) / 100.0;
-                fragColor = vec4(vec3(0.2, 0.1, color), 1.0);
-                //fragColor = vec4(color, 1.0);
-                //fragColor = vec4(vec3(0.0, 0.0, 0.0), 1.0);
+                //fragColor = vec4(vec3(0.2, 0.1, color), 1.0);
+                //fragColor = vec4(color, colorBackground.y, colorBackground.z, 1.0);
+                //fragColor = vec4(colorBackground.x, color, colorBackground.z, 1.0);
+                fragColor = vec4(colorBackground.x, colorBackground.y, color, 1.0);
                 return;
               }
               z = complexMul(z, z) + c;
             }
         
-            fragColor = vec4(color, 1.0);
+            fragColor = vec4(colorFractal, 1.0);
             //fragColor = vec4(1.0, 1.0, 1.0, 1.0);
           }
         `);
@@ -93,20 +99,21 @@ const MMMandelBrot = () => {
         gl.enableVertexAttribArray(positionAttributeLocation);
         gl.vertexAttribPointer(positionAttributeLocation, 2, gl.FLOAT, false, 0, 0);
 
-        let zoom = 35000;
-        let center = [-0.7020262791510383, 0.36030954333341126];
-        ;
+        let zoom = 2759;
+        let center = [-0.83, 0.38];
 
         const draw = () => {
             const resolutionUniformLocation = gl.getUniformLocation(program, 'resolution');
             const zoomUniformLocation = gl.getUniformLocation(program, 'zoom');
             const centerUniformLocation = gl.getUniformLocation(program, 'center');
-            const colorUniformLocation = gl.getUniformLocation(program, 'color');
+            const colorFractalUniformLocation = gl.getUniformLocation(program, 'colorFractal');
+            const colorBackgroundUniformLocation = gl.getUniformLocation(program, 'colorBackground');
 
             gl.uniform2f(resolutionUniformLocation, canvas.width, canvas.height);
             gl.uniform1f(zoomUniformLocation, zoom);
             gl.uniform2f(centerUniformLocation, center[0], center[1]);
-            gl.uniform3f(colorUniformLocation, color[0], color[1], color[2]);
+            gl.uniform3f(colorFractalUniformLocation, colorFractal[0], colorFractal[1], colorFractal[2]);
+            gl.uniform3f(colorBackgroundUniformLocation, colorBackground[0], colorBackground[1], colorBackground[2]);
 
             gl.viewport(0, 0, canvas.width, canvas.height);
             gl.clear(gl.COLOR_BUFFER_BIT);
@@ -166,7 +173,7 @@ const MMMandelBrot = () => {
             canvas.removeEventListener('mousemove', handleMouseMove);
             canvas.removeEventListener('mouseup', handleMouseUp);
         };
-    }, [color]);
+    }, [colorFractal, colorBackground, positionFractal]);
 
     return (
         <div>
@@ -208,7 +215,6 @@ function createProgram(gl, vertexShaderSource, fragmentShaderSource) {
 function checkShaderCompilation(gl, shader, type) {
     if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
         console.error(`ERROR compiling ${type}!`, gl.getShaderInfoLog(shader));
-        return;
     }
 }
 
