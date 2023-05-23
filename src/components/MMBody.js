@@ -12,7 +12,7 @@ const MMBody = () => {
     const [logInOutButtonText, setLogInOutButtonText] = useState("Login");
     const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
     const {setZIndex} = useContext(BackGroundContext);
-    const {setColorFractal, setColorBackground, setPositionFractal} = useContext(BackGroundContext);
+    const {setColorFractal, setColorBackground, setPositionFractal, setZoomFractal, setFirstIni} = useContext(BackGroundContext);
     const handleRegisterClose = () => setRegisterShow(false);
     const handleLoginClose = () => setLoginShow(false);
     const handleRegisterShow = () => setRegisterShow(true);
@@ -25,6 +25,7 @@ const MMBody = () => {
     const successfulLogin = () => {
         handleLoginClose();
         setIsUserLoggedIn(true);
+        setFirstIni(true);
         getFractalInfo();
     }
     const successfulLogout = () => {
@@ -56,6 +57,7 @@ const MMBody = () => {
                 setColorFractal(response.data.colorFractal);
                 setColorBackground(response.data.colorBackground);
                 setPositionFractal(response.data.positionFractal);
+                setZoomFractal(response.data.zoomFractal);
             }
         } catch (error) {
             console.log(error);

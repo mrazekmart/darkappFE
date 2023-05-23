@@ -26,6 +26,8 @@ function App() {
     const [colorBackground, setColorBackground] = useState([0.1, 0.1, 1]);
 
     const [positionFractal, setPositionFractal] = useState([-0.83, 0.38]);
+    const [zoomFractal, setZoomFractal] = useState(2759);
+    const [firstIni, setFirstIni] = useState(true);
 
     const setRGBColor = (value, index, fractal) => {
         if (fractal) {
@@ -54,7 +56,8 @@ function App() {
             const response = await axios.post("/api/user/updateFractal", {
                 colorFractal: colorFractal,
                 colorBackground: colorBackground,
-                positionFractal: positionFractal
+                positionFractal: positionFractal,
+                zoomFractal: zoomFractal
             }, {headers: {"Authorization": `Bearer ${token}`}});
             console.log(response);
 
@@ -66,13 +69,12 @@ function App() {
     return (
         <Router>
             <BackGroundContext.Provider value={{
-                zIndex,
-                setZIndex,
-                colorFractal,
-                setColorFractal,
-                colorBackground,
-                setColorBackground,
-                setPositionFractal
+                zIndex, setZIndex,
+                colorFractal, setColorFractal,
+                colorBackground, setColorBackground,
+                positionFractal, setPositionFractal,
+                zoomFractal, setZoomFractal,
+                firstIni, setFirstIni
             }}>
                 <div className="backgroundComponent" style={{zIndex: zIndex}}>
                     <MMMandelBrot/>
@@ -146,7 +148,7 @@ function App() {
                                                setBlueColorFractal(e.target.value);
                                            }}
                                     />
-                                    <button className="mmScience-btn" onClick={handleSaveColor}> Save color</button>
+                                    <button className="mmScience-btn" onClick={handleSaveColor}>Save</button>
                                 </div>
                             </div>
                         </div>

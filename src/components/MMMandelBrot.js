@@ -7,8 +7,7 @@ const MMMandelBrot = () => {
     const canvasRef = useRef(null);
     const navigate = useNavigate();
     const { setZIndex } = useContext(BackGroundContext);
-    const {colorFractal, colorBackground, positionFractal} = useContext(BackGroundContext);
-
+    const {colorFractal, colorBackground, positionFractal, setPositionFractal, zoomFractal, setZoomFractal, firstIni, setFirstIni} = useContext(BackGroundContext);
     const navigateToUrl = () => {
         setZIndex(-1);
         navigate("/");
@@ -26,13 +25,9 @@ const MMMandelBrot = () => {
         return () => {
             window.removeEventListener('keydown', handleKeyDown);
         };
-    }, []);
+    });
 
     useEffect(() => {
-
-        console.log(colorFractal);
-        console.log(colorBackground);
-        console.log(positionFractal);
 
         const canvas = canvasRef.current;
         const gl = canvas.getContext('webgl2');
@@ -102,6 +97,12 @@ const MMMandelBrot = () => {
         let zoom = 2759;
         let center = [-0.83, 0.38];
 
+        if(firstIni){
+            zoom = zoomFractal;
+            center = positionFractal;
+            setFirstIni(false);
+        }
+
         const draw = () => {
             const resolutionUniformLocation = gl.getUniformLocation(program, 'resolution');
             const zoomUniformLocation = gl.getUniformLocation(program, 'zoom');
@@ -123,8 +124,7 @@ const MMMandelBrot = () => {
         const handleWheel = (event) => {
             event.preventDefault();
             zoom *= 1.0 - event.deltaY * 0.001;
-            console.log(zoom);
-            console.log(center);
+            setZoomFractal(zoom);
             draw();
         };
 
@@ -151,6 +151,7 @@ const MMMandelBrot = () => {
             prevMousePos.x = event.clientX;
             prevMousePos.y = event.clientY;
 
+            setPositionFractal(center);
             draw();
         };
 
@@ -173,7 +174,8 @@ const MMMandelBrot = () => {
             canvas.removeEventListener('mousemove', handleMouseMove);
             canvas.removeEventListener('mouseup', handleMouseUp);
         };
-    }, [colorFractal, colorBackground, positionFractal]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [colorFractal, colorBackground]);
 
     return (
         <div>
