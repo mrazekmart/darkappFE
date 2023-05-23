@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useRef} from 'react';
+import React, {useContext, useEffect, useRef, useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import shader from 'glslify';
 import {BackGroundContext} from "../BackGroundContext";
@@ -6,8 +6,9 @@ import {BackGroundContext} from "../BackGroundContext";
 const MMMandelBrot = () => {
     const canvasRef = useRef(null);
     const navigate = useNavigate();
+
     const { setZIndex } = useContext(BackGroundContext);
-    const {colorFractal, colorBackground, positionFractal, setPositionFractal, zoomFractal, setZoomFractal, firstIni, setFirstIni} = useContext(BackGroundContext);
+    const {colorFractal, colorBackground, positionFractal, setPositionFractal, zoomFractal, setZoomFractal} = useContext(BackGroundContext);
     const navigateToUrl = () => {
         setZIndex(-1);
         navigate("/");
@@ -73,7 +74,9 @@ const MMMandelBrot = () => {
                 //fragColor = vec4(vec3(0.2, 0.1, color), 1.0);
                 //fragColor = vec4(color, colorBackground.y, colorBackground.z, 1.0);
                 //fragColor = vec4(colorBackground.x, color, colorBackground.z, 1.0);
+                //fragColor = vec4(colorBackground.x, color, colorBackground.z, 1.0);
                 fragColor = vec4(colorBackground.x, colorBackground.y, color, 1.0);
+                //fragColor = vec4(colorBackground.x, colorBackground.y, colorBackground.z, 1.0);
                 return;
               }
               z = complexMul(z, z) + c;
@@ -94,14 +97,8 @@ const MMMandelBrot = () => {
         gl.enableVertexAttribArray(positionAttributeLocation);
         gl.vertexAttribPointer(positionAttributeLocation, 2, gl.FLOAT, false, 0, 0);
 
-        let zoom = 2759;
-        let center = [-0.83, 0.38];
-
-        if(firstIni){
-            zoom = zoomFractal;
-            center = positionFractal;
-            setFirstIni(false);
-        }
+        let zoom = zoomFractal;
+        let center = positionFractal;
 
         const draw = () => {
             const resolutionUniformLocation = gl.getUniformLocation(program, 'resolution');
@@ -178,8 +175,8 @@ const MMMandelBrot = () => {
     }, [colorFractal, colorBackground]);
 
     return (
-        <div>
-            <canvas ref={canvasRef} style={{ position: 'absolute', top: 0, left: 0 }}/>
+        <div style={{ position: 'relative' }}>
+            <canvas ref={canvasRef} style={{ position: 'fixed', top: 0, left: 0 }}/>
         </div>
     );
 };

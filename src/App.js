@@ -27,7 +27,8 @@ function App() {
 
     const [positionFractal, setPositionFractal] = useState([-0.83, 0.38]);
     const [zoomFractal, setZoomFractal] = useState(2759);
-    const [firstIni, setFirstIni] = useState(true);
+
+    const [resetLoginRegisterValue, setResetLoginRegisterValue] = useState(false);
 
     const setRGBColor = (value, index, fractal) => {
         if (fractal) {
@@ -74,7 +75,7 @@ function App() {
                 colorBackground, setColorBackground,
                 positionFractal, setPositionFractal,
                 zoomFractal, setZoomFractal,
-                firstIni, setFirstIni
+                resetLoginRegisterValue, setResetLoginRegisterValue
             }}>
                 <div className="backgroundComponent" style={{zIndex: zIndex}}>
                     <MMMandelBrot/>

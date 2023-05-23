@@ -11,8 +11,7 @@ const MMBody = () => {
     const [loginShow, setLoginShow] = useState(false);
     const [logInOutButtonText, setLogInOutButtonText] = useState("Login");
     const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
-    const {setZIndex} = useContext(BackGroundContext);
-    const {setColorFractal, setColorBackground, setPositionFractal, setZoomFractal, setFirstIni} = useContext(BackGroundContext);
+    const {setZIndex, setColorFractal, setColorBackground, setPositionFractal, setZoomFractal, resetLoginRegisterValue, setResetLoginRegisterValue} = useContext(BackGroundContext);
     const handleRegisterClose = () => setRegisterShow(false);
     const handleLoginClose = () => setLoginShow(false);
     const handleRegisterShow = () => setRegisterShow(true);
@@ -22,15 +21,21 @@ const MMBody = () => {
         setRegisterShow(false);
         setLoginShow(true)
     };
+
+    const successfulRegister = () =>{
+        handleRegisterClose();
+        setResetLoginRegisterValue(!resetLoginRegisterValue);
+    }
     const successfulLogin = () => {
         handleLoginClose();
         setIsUserLoggedIn(true);
-        setFirstIni(true);
         getFractalInfo();
+        setResetLoginRegisterValue(!resetLoginRegisterValue);
     }
     const successfulLogout = () => {
         localStorage.removeItem('jwt');
         setIsUserLoggedIn(false);
+        setResetLoginRegisterValue(!resetLoginRegisterValue);
     }
 
     const handleLogInOutButton = () => {
@@ -100,7 +105,7 @@ const MMBody = () => {
                         onClick={handleLogInOutButton}>{logInOutButtonText}</button>
             </div>
             <MMModal show={registerShow} handleClose={handleRegisterClose}>
-                <MMRegister handleClose={handleRegisterClose}/>
+                <MMRegister successfulRegister={successfulRegister}/>
                 <div className="flex-direction-row flex-justify-content-center">
                     <p>Already registered?</p>
                     <button className="mmScience-btn mmRegisterToLoginButton" onClick={switchToLogin}>Login</button>

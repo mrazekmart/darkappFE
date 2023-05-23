@@ -1,5 +1,6 @@
-import React, {useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import axios from 'axios';
+import {BackGroundContext} from "../../BackGroundContext";
 
 const MMLogin = ({successfulLogin}) => {
     const [userName, setUserName] = useState("");
@@ -7,6 +8,14 @@ const MMLogin = ({successfulLogin}) => {
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(null);
 
+    const {resetLoginRegisterValue} = useContext(BackGroundContext);
+
+    useEffect(()=>{
+        setUserName("");
+        setPassword("");
+        setError(null);
+        setSuccess(null);
+    },[resetLoginRegisterValue])
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError(null);

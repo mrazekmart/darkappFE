@@ -40,6 +40,7 @@ const MMPerlinNoise = () => {
 
     useEffect(() => {
         fetchImage();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [zoom, density, xCoord, yCoord]);
     const handleChange = (event) => {
         setZoom(event.target.value);
@@ -60,7 +61,7 @@ const MMPerlinNoise = () => {
     return (
         <div className="mmContainerWrapper">
             <div className="mmContainer">
-                <div className="mmContainerTop">
+                <div className="mmContainerTop flex-direction-row-space-10">
                     <div className="flex-direction-column">
                         <div>
                             <p className="mmLabel">Perlin Scale</p>
@@ -84,25 +85,31 @@ const MMPerlinNoise = () => {
                         </div>
                     </div>
                     <div className="flex-direction-column">
-                        <p className="mmLabel">X coordination OffSet</p>
-                        <input className="mmInput-box"
-                               type="text"
-                               value={xCoord}
-                               onChange={handleInputXCoord}
-                               placeholder="Set X coordination"
-                        />
-                        <p className="mmLabel">Y coordination OffSet</p>
-                        <input className="mmInput-box"
-                               type="text"
-                               value={yCoord}
-                               onChange={handleInputYCoord}
-                               placeholder="Set Y coordination"
-                        />
+                        <div>
+                            <p className="mmLabel">X coordination OffSet</p>
+                            <input className="mmPerlinSlider background-green"
+                                   type="range"
+                                   min="0"
+                                   max="3000"
+                                   value={xCoord}
+                                   onChange={handleInputXCoord}
+                            />
+                        </div>
+                        <div>
+                            <p className="mmLabel">Y coordination OffSet</p>
+                            <input className="mmPerlinSlider background-green"
+                                   type="range"
+                                   min="0"
+                                   max="3000"
+                                   value={yCoord}
+                                   onChange={handleInputYCoord}
+                            />
+                        </div>
                     </div>
                 </div>
                 <div className="mmContainerDown">
                     {imageDataUrl ? (
-                        <img src={imageDataUrl} alt="Image from API" className="mmPerlinBox"/>
+                        <img src={imageDataUrl} alt="" className="mmPerlinBox"/>
                     ) : (
                         <p>Loading image...</p>
                     )}
