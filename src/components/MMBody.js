@@ -13,7 +13,7 @@ const MMBody = () => {
     const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
     const [showRegisterButton, setShowRegisterButton] = useState(true);
     const {
-        setZIndex,
+        setBackGroundZIndex,
         setColorFractal,
         setColorBackground,
         setPositionFractal,
@@ -102,7 +102,7 @@ const MMBody = () => {
                 <MMDropdownMenu
                     title="Fractals"
                     menuItems={[
-                        {label: 'Mandelbrot set', onClick: () => setZIndex(10)},
+                        {label: 'Mandelbrot set', onClick: () => setBackGroundZIndex(10)},
                     ]}
                 />
                 <MMDropdownMenu

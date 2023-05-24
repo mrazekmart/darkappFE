@@ -17,14 +17,13 @@ const MMProfile = () => {
             reader.readAsDataURL(file);
         }
     };
-
-    console.log(userNameProfile);
     return (
         <div className="user-profile mmProfileContainer">
-            <img src={profilePicture} alt="User Profile Picture" className="profile-picture"/>
+            <img src={profilePicture} alt="" className="profile-picture"/>
             <h2 className="name">{userNameProfile}</h2>
             {/*<input type="file" accept="image/*" onChange={handleFileChange} />*/}
-        </div>);
+        </div>
+    );
 };
 
 export default MMProfile;

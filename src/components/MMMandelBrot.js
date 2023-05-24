@@ -7,10 +7,10 @@ const MMMandelBrot = () => {
     const canvasRef = useRef(null);
     const navigate = useNavigate();
 
-    const { setZIndex } = useContext(BackGroundContext);
+    const { setBackGroundZIndex } = useContext(BackGroundContext);
     const {colorFractal, colorBackground, positionFractal, setPositionFractal, zoomFractal, setZoomFractal} = useContext(BackGroundContext);
     const navigateToUrl = () => {
-        setZIndex(-1);
+        setBackGroundZIndex(-1);
         navigate("/");
     };
 
