@@ -1,3 +1,33 @@
+.user-profile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-right: 20px;
+}
+
+.profile-picture {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 10px;
+}
+
+.mmProfileContainer{
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    right: 0;
+}
+
+.name {
+    font-size: 24px;
+    font-weight: bold;
+    color: #58ffe3;
+    margin: 0;
+}
+
 .backgroundComponent {
     position: absolute;
     top: 0;
@@ -18,12 +48,14 @@
     padding-bottom: 20px;
     border-radius: 14px;
 }
+
 .mmRegisterForm input {
     margin-bottom: 10px;
     height: 40px;
     padding: 5px;
     font-size: 16px;
 }
+
 .mmRegisterForm button {
     height: 40px;
     font-size: 16px;
@@ -33,9 +65,11 @@
     border-radius: 5px;
     cursor: pointer;
 }
+
 .mmRegisterForm .error {
     color: red;
 }
+
 .mmRegisterForm .success {
     color: green;
 }
@@ -44,22 +78,23 @@
     position: fixed;
     top: 0;
     left: 0;
-    width:100%;
+    width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, 0.6);
     z-index: 1000;
 }
 
 .mmModal-main {
-    position:fixed;
+    position: fixed;
     background: white;
     height: auto;
-    top:50%;
-    left:50%;
-    transform: translate(-50%,-50%);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     border-radius: 14px;
     border: 4px solid #444
 }
+
 /* !!!!! */
 
 /* !!! CONQUEROR GAME !!! */
@@ -137,18 +172,21 @@
     transform: scale(0.98);
 }
 
-.mmRegisterButtonsContainer{
+.mmRegisterButtonsContainer {
     display: flex;
     flex-direction: column;
     position: absolute;
     right: 0;
-    margin-right: 10px;
+    margin-right: 45px;
 }
-.mmRegisterButton{
+
+.mmRegisterButton {
     font-size: 12px;
     margin-top: 5px;
+    width: 100px;
 }
-.mmRegisterToLoginButton{
+
+.mmRegisterToLoginButton {
     font-size: 12px;
     margin: 10px;
 }
@@ -212,9 +250,11 @@
     background-color: rgba(168, 69, 79, 0.6);
     display: inline-block;
 }
-.mmContainerWrapper{
+
+.mmContainerWrapper {
     text-align: center;
 }
+
 .mmContainerDown {
     /*background-color: #dceaf5;*/
     display: flex;
@@ -277,6 +317,7 @@
     background: white;
     cursor: pointer;
 }
+
 .mmInput {
     margin: 2px 20px;
     height: 22px;
@@ -336,32 +377,41 @@
 .App-link {
     color: #61dafb;
 }
+
 .display-block {
     display: block;
 }
+
 .display-none {
     display: none;
 }
-.flex-direction-row{
+
+.flex-direction-row {
     display: flex;
     flex-direction: row;
 }
-.flex-direction-row-space-10{
+
+.flex-direction-row-space-10 {
     gap: 10px;
 }
-.flex-direction-column{
+
+.flex-direction-column {
     display: flex;
     flex-direction: column;
 }
-.flex-justify-content-center{
+
+.flex-justify-content-center {
     justify-content: center;
 }
-.background-red{
+
+.background-red {
     background: red;
 }
-.background-green{
+
+.background-green {
     background: green;
 }
-.background-blue{
+
+.background-blue {
     background: blue;
 }

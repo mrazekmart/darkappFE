@@ -11,6 +11,8 @@ import MMMandelBrot from "./components/MMMandelBrot";
 import {BackGroundContext} from './BackGroundContext';
 import React from "react";
 import axios from "axios";
+import dp from './dp.png';
+import MMProfile from "./components/login/MMProfile";
 
 function App() {
     const [zIndex, setZIndex] = useState(-1);
@@ -29,6 +31,8 @@ function App() {
     const [zoomFractal, setZoomFractal] = useState(2759);
 
     const [resetLoginRegisterValue, setResetLoginRegisterValue] = useState(false);
+
+    const [userNameProfile, setUserNameProfile] = useState("John");
 
     const setRGBColor = (value, index, fractal) => {
         if (fractal) {
@@ -75,7 +79,8 @@ function App() {
                 colorBackground, setColorBackground,
                 positionFractal, setPositionFractal,
                 zoomFractal, setZoomFractal,
-                resetLoginRegisterValue, setResetLoginRegisterValue
+                resetLoginRegisterValue, setResetLoginRegisterValue,
+                userNameProfile, setUserNameProfile
             }}>
                 <div className="backgroundComponent" style={{zIndex: zIndex}}>
                     <MMMandelBrot/>
@@ -83,7 +88,7 @@ function App() {
                 <div className="container">
                     <div className="d-flex flex-wrap mmBtn-container">
                         <Header/>
-
+                        <MMProfile/>
                         <div style={{zIndex: zIndex * 2}} className="mmRegisterButtonsContainer">
                             <div className="flex-direction-row flex-direction-row-space-10">
                                 <div className="flex-direction-column">

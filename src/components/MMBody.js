@@ -11,7 +11,17 @@ const MMBody = () => {
     const [loginShow, setLoginShow] = useState(false);
     const [logInOutButtonText, setLogInOutButtonText] = useState("Login");
     const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
-    const {setZIndex, setColorFractal, setColorBackground, setPositionFractal, setZoomFractal, resetLoginRegisterValue, setResetLoginRegisterValue} = useContext(BackGroundContext);
+    const [showRegisterButton, setShowRegisterButton] = useState(true);
+    const {
+        setZIndex,
+        setColorFractal,
+        setColorBackground,
+        setPositionFractal,
+        setZoomFractal,
+        resetLoginRegisterValue,
+        setResetLoginRegisterValue,
+        setUserNameProfile
+    } = useContext(BackGroundContext);
     const handleRegisterClose = () => setRegisterShow(false);
     const handleLoginClose = () => setLoginShow(false);
     const handleRegisterShow = () => setRegisterShow(true);
@@ -22,7 +32,7 @@ const MMBody = () => {
         setLoginShow(true)
     };
 
-    const successfulRegister = () =>{
+    const successfulRegister = () => {
         handleRegisterClose();
         setResetLoginRegisterValue(!resetLoginRegisterValue);
     }
@@ -31,11 +41,14 @@ const MMBody = () => {
         setIsUserLoggedIn(true);
         getFractalInfo();
         setResetLoginRegisterValue(!resetLoginRegisterValue);
+        setShowRegisterButton(false);
     }
     const successfulLogout = () => {
         localStorage.removeItem('jwt');
         setIsUserLoggedIn(false);
         setResetLoginRegisterValue(!resetLoginRegisterValue);
+        setUserNameProfile("John");
+        setShowRegisterButton(true);
     }
 
     const handleLogInOutButton = () => {
@@ -57,7 +70,7 @@ const MMBody = () => {
     const getFractalInfo = async () => {
         const token = localStorage.getItem('jwt');
         try {
-            const response = await axios.get("/api/user/getFractalInfo", { headers: { "Authorization": `Bearer ${token}` }});
+            const response = await axios.get("/api/user/getFractalInfo", {headers: {"Authorization": `Bearer ${token}`}});
             if (response.data) {
                 setColorFractal(response.data.colorFractal);
                 setColorBackground(response.data.colorBackground);
@@ -100,7 +113,8 @@ const MMBody = () => {
                 />
             </div>
             <div className="mmRegisterButtonsContainer">
-                <button className="mmScience-btn mmRegisterButton" onClick={handleRegisterShow}>Register</button>
+                {showRegisterButton && (
+                    <button className="mmScience-btn mmRegisterButton" onClick={handleRegisterShow}>Register</button>)}
                 <button className="mmScience-btn mmRegisterButton"
                         onClick={handleLogInOutButton}>{logInOutButtonText}</button>
             </div>

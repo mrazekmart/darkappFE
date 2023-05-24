@@ -3,38 +3,39 @@ import axios from 'axios';
 import {BackGroundContext} from "../../BackGroundContext";
 
 const MMLogin = ({successfulLogin}) => {
-    const [userName, setUserName] = useState("");
-    const [password, setPassword] = useState("");
-    const [error, setError] = useState(null);
-    const [success, setSuccess] = useState(null);
+    const [userNameLoginForm, setUserNameLoginForm] = useState("");
+    const [passwordLoginForm, setPasswordLoginForm] = useState("");
+    const [errorLoginForm, setErrorLoginForm] = useState(null);
+    const [successLoginForm, setSuccessLoginForm] = useState(null);
 
-    const {resetLoginRegisterValue} = useContext(BackGroundContext);
+    const {resetLoginRegisterValue, setUserNameProfile} = useContext(BackGroundContext);
 
     useEffect(()=>{
-        setUserName("");
-        setPassword("");
-        setError(null);
-        setSuccess(null);
+        setUserNameLoginForm("");
+        setPasswordLoginForm("");
+        setErrorLoginForm(null);
+        setSuccessLoginForm(null);
     },[resetLoginRegisterValue])
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setError(null);
-        setSuccess(null);
+        setErrorLoginForm(null);
+        setSuccessLoginForm(null);
 
         try {
-            const response = await axios.post("/api/auth/login", {userName: userName, password: password});
-            setSuccess('Login successful');
+            const response = await axios.post("/api/auth/login", {userName: userNameLoginForm, password: passwordLoginForm});
+            setSuccessLoginForm('Login successful');
             if (response.data) {
                 const token = response.data.token;
                 localStorage.setItem('jwt', token);
             }
+            setUserNameProfile(userNameLoginForm);
             successfulLogin();
         } catch (error) {
             console.log(error);
             if (error.response && error.response.status === 409) {
-                setError(error.response.data);
+                setErrorLoginForm(error.response.data);
             } else {
-                setError('Something went wrong');
+                setErrorLoginForm('Something went wrong');
             }
         }
     };
@@ -44,19 +45,19 @@ const MMLogin = ({successfulLogin}) => {
             <h2>Login</h2>
             <input
                 type="text"
-                value={userName}
-                onChange={e => setUserName(e.target.value)}
+                value={userNameLoginForm}
+                onChange={e => setUserNameLoginForm(e.target.value)}
                 placeholder="Username"
             />
             <input
                 type="password"
-                value={password}
-                onChange={e => setPassword(e.target.value)}
+                value={passwordLoginForm}
+                onChange={e => setPasswordLoginForm(e.target.value)}
                 placeholder="Password"
             />
             <button type="submit">Login</button>
-            {error && <p className="error">{error}</p>}
-            {success && <p className="success">{success}</p>}
+            {errorLoginForm && <p className="error">{errorLoginForm}</p>}
+            {successLoginForm && <p className="success">{successLoginForm}</p>}
         </form>
     );
 };
