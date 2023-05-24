@@ -1,4 +1,5 @@
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
+import React from "react";
 import {useState} from 'react';
 import './App.css';
 import Header from './components/MMheader';
@@ -8,10 +9,9 @@ import MMSorting from "./components/MMSorting";
 import MMPerlinNoise from "./components/MMNoises";
 import MMConquerorGame from "./components/MMConquerorGame";
 import MMMandelBrot from "./components/MMMandelBrot";
-import {BackGroundContext} from './BackGroundContext';
-import React from "react";
 import MMProfile from "./components/login/MMProfile";
 import MMBackgroundSettings from "./components/background/MMBackgroundSettings";
+import {BackGroundContext} from './BackGroundContext';
 
 function App() {
     const [backGroundZIndex, setBackGroundZIndex] = useState(-1);

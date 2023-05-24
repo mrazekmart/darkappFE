@@ -9,7 +9,7 @@ const MMBackgroundSettings = () => {
 
     const [redColorBackground, setRedColorBackground] = useState("255");
     const [greenColorBackground, setGreenColorBackground] = useState("255");
-    const [blueColorBackground, setBlueColorBackground] = useState("255");
+    //const [blueColorBackground, setBlueColorBackground] = useState("255");
 
     const {backGroundZIndex, colorFractal, setColorFractal, colorBackground, setColorBackground, positionFractal, zoomFractal} = useContext(BackGroundContext);
     const setRGBColor = (value, index, fractal) => {
@@ -70,7 +70,7 @@ const MMBackgroundSettings = () => {
                                setGreenColorBackground(e.target.value);
                            }}
                     />
-                    <input className="mmPerlinSlider background-blue"
+{/*                    <input className="mmPerlinSlider background-blue"
                            type="range"
                            min="1"
                            max="255"
@@ -79,7 +79,7 @@ const MMBackgroundSettings = () => {
                                setRGBColor(e.target.value, 2, false);
                                setBlueColorBackground(e.target.value);
                            }}
-                    />
+                    />*/}
                 </div>
                 <div className="flex-direction-column">
                     <input className="mmPerlinSlider background-red"

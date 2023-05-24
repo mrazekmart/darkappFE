@@ -74,7 +74,6 @@ const MMMandelBrot = () => {
                 //fragColor = vec4(vec3(0.2, 0.1, color), 1.0);
                 //fragColor = vec4(color, colorBackground.y, colorBackground.z, 1.0);
                 //fragColor = vec4(colorBackground.x, color, colorBackground.z, 1.0);
-                //fragColor = vec4(colorBackground.x, color, colorBackground.z, 1.0);
                 fragColor = vec4(colorBackground.x, colorBackground.y, color, 1.0);
                 //fragColor = vec4(colorBackground.x, colorBackground.y, colorBackground.z, 1.0);
                 return;

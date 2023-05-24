@@ -18,8 +18,7 @@ const MMBody = () => {
         setColorBackground,
         setPositionFractal,
         setZoomFractal,
-        resetLoginRegisterValue,
-        setResetLoginRegisterValue,
+        resetLoginRegisterValue, setResetLoginRegisterValue,
         setUserNameProfile
     } = useContext(BackGroundContext);
     const handleRegisterClose = () => setRegisterShow(false);
@@ -38,8 +37,8 @@ const MMBody = () => {
     }
     const successfulLogin = () => {
         handleLoginClose();
-        setIsUserLoggedIn(true);
         getFractalInfo();
+        setIsUserLoggedIn(true);
         setResetLoginRegisterValue(!resetLoginRegisterValue);
         setShowRegisterButton(false);
     }
