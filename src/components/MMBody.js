@@ -19,7 +19,8 @@ const MMBody = () => {
         setPositionFractal,
         setZoomFractal,
         resetLoginRegisterValue, setResetLoginRegisterValue,
-        setUserNameProfile
+        setUserNameProfile,
+        setProfilePicture
     } = useContext(BackGroundContext);
     const handleRegisterClose = () => setRegisterShow(false);
     const handleLoginClose = () => setLoginShow(false);
@@ -37,7 +38,7 @@ const MMBody = () => {
     }
     const successfulLogin = () => {
         handleLoginClose();
-        getFractalInfo();
+        getUserProfileSettings();
         setIsUserLoggedIn(true);
         setResetLoginRegisterValue(!resetLoginRegisterValue);
         setShowRegisterButton(false);
@@ -66,15 +67,18 @@ const MMBody = () => {
         }
     }, [isUserLoggedIn]);
 
-    const getFractalInfo = async () => {
+    const getUserProfileSettings = async () => {
         const token = localStorage.getItem('jwt');
         try {
-            const response = await axios.get("/api/user/getFractalInfo", {headers: {"Authorization": `Bearer ${token}`}});
+            const response = await axios.get("/api/user/getUserProfileSettings", {headers: {"Authorization": `Bearer ${token}`}});
             if (response.data) {
-                setColorFractal(response.data.colorFractal);
-                setColorBackground(response.data.colorBackground);
-                setPositionFractal(response.data.positionFractal);
-                setZoomFractal(response.data.zoomFractal);
+                setColorFractal(response.data.mmFractalInfo.colorFractal);
+                setColorBackground(response.data.mmFractalInfo.colorBackground);
+                setPositionFractal(response.data.mmFractalInfo.positionFractal);
+                setZoomFractal(response.data.mmFractalInfo.zoomFractal);
+
+                const imageDataUrl = `data:image/png;base64,${response.data.userProfilePicture}`;
+                setProfilePicture(imageDataUrl);
             }
         } catch (error) {
             console.log(error);
