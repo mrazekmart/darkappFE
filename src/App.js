@@ -12,6 +12,7 @@ import MMMandelBrot from "./components/MMMandelBrot";
 import MMProfile from "./components/login/MMProfile";
 import MMBackgroundSettings from "./components/background/MMBackgroundSettings";
 import {BackGroundContext} from './BackGroundContext';
+import dp from "./dp.png";
 
 function App() {
     const [backGroundZIndex, setBackGroundZIndex] = useState(-1);
@@ -24,6 +25,7 @@ function App() {
     const [resetLoginRegisterValue, setResetLoginRegisterValue] = useState(false);
 
     const [userNameProfile, setUserNameProfile] = useState("John");
+    const [profilePicture, setProfilePicture] = useState(dp);
 
     return (
         <Router>
@@ -34,7 +36,8 @@ function App() {
                 positionFractal, setPositionFractal,
                 zoomFractal, setZoomFractal,
                 resetLoginRegisterValue, setResetLoginRegisterValue,
-                userNameProfile, setUserNameProfile
+                userNameProfile, setUserNameProfile,
+                profilePicture, setProfilePicture
             }}>
                 <div className="backgroundComponent" style={{zIndex: backGroundZIndex}}>
                     <MMMandelBrot/>

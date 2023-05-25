@@ -1,13 +1,20 @@
-import React, {useContext, useState} from "react";
-import dp from "../../dp.png";
+import React, {useContext} from "react";
 import {BackGroundContext} from "../../BackGroundContext";
 import axios from "axios";
 
 const MMProfile = () => {
-    const [profilePicture, setProfilePicture] = useState(dp);
-    const {userNameProfile} = useContext(BackGroundContext);
+    const {userNameProfile, profilePicture, setProfilePicture} = useContext(BackGroundContext);
     const handleFileChange = (event) => {
-        setProfilePicture(event.target.files[0]);
+        const file = event.target.files[0];
+        const reader = new FileReader();
+
+        reader.onloadend = () => {
+            setProfilePicture(reader.result);
+        };
+
+        if (file) {
+            reader.readAsDataURL(file);
+        }
     };
 
     const handleSubmit = (event) => {
