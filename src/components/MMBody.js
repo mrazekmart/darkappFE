@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useState} from 'react';
-import MMDropdownMenu from "./MMDropDownMenu";
+import MMDropdownMenuButton from "./MMDropdownMenuButton";
 import MMModal from "./MMModal";
 import MMRegister from "./login/MMRegister";
 import MMLogin from "./login/MMLogin";
@@ -9,8 +9,6 @@ import axios from "axios";
 const MMBody = () => {
     const [registerShow, setRegisterShow] = useState(false);
     const [loginShow, setLoginShow] = useState(false);
-    const [logInOutButtonText, setLogInOutButtonText] = useState("Login");
-    const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
     const [showRegisterButton, setShowRegisterButton] = useState(true);
     const {
         setBackGroundZIndex,
@@ -20,8 +18,11 @@ const MMBody = () => {
         setZoomFractal,
         resetLoginRegisterValue, setResetLoginRegisterValue,
         setUserNameProfile,
-        setProfilePicture
+        setProfilePicture,
+        userLoggingOut, setUserLoggingOut,
+        isUserLoggedIn, setIsUserLoggedIn
     } = useContext(BackGroundContext);
+
     const handleRegisterClose = () => setRegisterShow(false);
     const handleLoginClose = () => setLoginShow(false);
     const handleRegisterShow = () => setRegisterShow(true);
@@ -58,14 +59,10 @@ const MMBody = () => {
             successfulLogout();
         }
     }
-
     useEffect(() => {
-        if (isUserLoggedIn) {
-            setLogInOutButtonText("Logout");
-        } else {
-            setLogInOutButtonText("Login");
-        }
-    }, [isUserLoggedIn]);
+        successfulLogout();
+        // eslint-disable-next-line
+    }, [userLoggingOut]);
 
     const getUserProfileSettings = async () => {
         const token = localStorage.getItem('jwt');
@@ -76,9 +73,10 @@ const MMBody = () => {
                 setColorBackground(response.data.mmFractalInfo.colorBackground);
                 setPositionFractal(response.data.mmFractalInfo.positionFractal);
                 setZoomFractal(response.data.mmFractalInfo.zoomFractal);
-
-                const imageDataUrl = `data:image/png;base64,${response.data.userProfilePicture}`;
-                setProfilePicture(imageDataUrl);
+                if(response.data.userProfilePicture){
+                    const imageDataUrl = `data:image/png;base64,${response.data.userProfilePicture}`;
+                    setProfilePicture(imageDataUrl);
+                }
             }
         } catch (error) {
             console.log(error);
@@ -88,27 +86,27 @@ const MMBody = () => {
     return (
         <div className="d-flex flex-wrap mmBtn-container">
             <div>
-                <MMDropdownMenu
+                <MMDropdownMenuButton
                     title="Sorting"
                     menuItems={[
                         {label: 'BubbleSort', path: '/sorting/bubblesort'},
                         {label: 'QuickSort', path: '/sorting/quicksort'},
                     ]}
                 />
-                <MMDropdownMenu
+                <MMDropdownMenuButton
                     title="Noises"
                     menuItems={[
                         {label: 'Perlin Noise', path: '/noises/perlin'},
                         {label: 'Noises Option 2', path: '/noises/option2'},
                     ]}
                 />
-                <MMDropdownMenu
+                <MMDropdownMenuButton
                     title="Fractals"
                     menuItems={[
                         {label: 'Mandelbrot set', onClick: () => setBackGroundZIndex(10)},
                     ]}
                 />
-                <MMDropdownMenu
+                <MMDropdownMenuButton
                     title="Games"
                     menuItems={[
                         {label: 'Conquer', path: '/games'},
@@ -117,9 +115,12 @@ const MMBody = () => {
             </div>
             <div className="mmRegisterButtonsContainer">
                 {showRegisterButton && (
-                    <button className="mmScience-btn mmRegisterButton" onClick={handleRegisterShow}>Register</button>)}
-                <button className="mmScience-btn mmRegisterButton"
-                        onClick={handleLogInOutButton}>{logInOutButtonText}</button>
+                    <button className="mmScience-btn mmRegisterButton" onClick={handleRegisterShow}>Register</button>)
+                }
+                {showRegisterButton &&
+                    <button className="mmScience-btn mmRegisterButton"
+                        onClick={handleLogInOutButton}>Login</button>
+                }
             </div>
             <MMModal show={registerShow} handleClose={handleRegisterClose}>
                 <MMRegister successfulRegister={successfulRegister}/>

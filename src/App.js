@@ -26,6 +26,8 @@ function App() {
 
     const [userNameProfile, setUserNameProfile] = useState("John");
     const [profilePicture, setProfilePicture] = useState(dp);
+    const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
+    const [userLoggingOut, setUserLoggingOut] = useState(false);
 
     return (
         <Router>
@@ -37,7 +39,9 @@ function App() {
                 zoomFractal, setZoomFractal,
                 resetLoginRegisterValue, setResetLoginRegisterValue,
                 userNameProfile, setUserNameProfile,
-                profilePicture, setProfilePicture
+                profilePicture, setProfilePicture,
+                isUserLoggedIn, setIsUserLoggedIn,
+                userLoggingOut, setUserLoggingOut
             }}>
                 <div className="backgroundComponent" style={{zIndex: backGroundZIndex}}>
                     <MMMandelBrot/>

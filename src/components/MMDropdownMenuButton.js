@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {Link} from 'react-router-dom';
 
-const MMDropdownMenu = ({title, menuItems}) => {
+const MMDropdownMenuButton = ({title, menuItems}) => {
 
     return (
         <div className="mmDropdown">
@@ -27,4 +27,4 @@ const MMDropdownMenu = ({title, menuItems}) => {
     );
 };
 
-export default MMDropdownMenu;
+export default MMDropdownMenuButton;
