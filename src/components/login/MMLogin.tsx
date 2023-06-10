@@ -2,11 +2,14 @@ import React, {useContext, useEffect, useState} from "react";
 import axios from 'axios';
 import {BackGroundContext} from "../../BackGroundContext";
 
-const MMLogin = ({successfulLogin}) => {
+interface MMLoginProps {
+    successfulLogin: () => void;
+}
+const MMLogin = ({successfulLogin}: MMLoginProps) => {
     const [userNameLoginForm, setUserNameLoginForm] = useState("");
     const [passwordLoginForm, setPasswordLoginForm] = useState("");
-    const [errorLoginForm, setErrorLoginForm] = useState(null);
-    const [successLoginForm, setSuccessLoginForm] = useState(null);
+    const [errorLoginForm, setErrorLoginForm] = useState<string | null>(null);
+    const [successLoginForm, setSuccessLoginForm] = useState<string | null>(null);
 
     const {resetLoginRegisterValue, setUserNameProfile} = useContext(BackGroundContext);
 
@@ -16,7 +19,7 @@ const MMLogin = ({successfulLogin}) => {
         setErrorLoginForm(null);
         setSuccessLoginForm(null);
     },[resetLoginRegisterValue])
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setErrorLoginForm(null);
         setSuccessLoginForm(null);
@@ -30,7 +33,7 @@ const MMLogin = ({successfulLogin}) => {
             }
             setUserNameProfile(userNameLoginForm);
             successfulLogin();
-        } catch (error) {
+        } catch (error: any) {
             console.log(error);
             if (error.response && error.response.status === 409) {
                 setErrorLoginForm(error.response.data);

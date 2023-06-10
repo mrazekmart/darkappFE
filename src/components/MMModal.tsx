@@ -1,12 +1,19 @@
-import React, { useEffect, useRef } from 'react';
+import * as React from 'react';
+import { useEffect, useRef } from 'react';
 
-const MMModal = ({ handleClose, show, children }) => {
-    const modalRef = useRef();
+interface MMModalProps {
+    handleClose: () => void;
+    show: boolean;
+    children: any;
+}
+
+const MMModal = ({ handleClose, show, children } : MMModalProps) => {
+    const modalRef = useRef<HTMLDivElement>(null);
     const showHideClassName = show ? "mmModal display-block" : "mmModal display-none";
 
     useEffect(() => {
-        const handleClickOutside = (event) => {
-            if (modalRef.current && !modalRef.current.contains(event.target)) {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
                 handleClose();
             }
         };

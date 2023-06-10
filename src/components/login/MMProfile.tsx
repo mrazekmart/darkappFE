@@ -2,6 +2,7 @@ import React, {useContext, useEffect, useRef, useState} from "react";
 import {BackGroundContext} from "../../BackGroundContext";
 import axios from "axios";
 import MMDropdownMenuText from "../MMDropdownMenuText";
+import {MenuItem} from "../menuItems";
 
 const MMProfile = () => {
     const {
@@ -12,26 +13,29 @@ const MMProfile = () => {
         isUserLoggedIn,
         setUserLoggingOut
     } = useContext(BackGroundContext);
-    const [profilePictureFile, setProfilePictureFile] = useState(null);
+    const [profilePictureFile, setProfilePictureFile] = useState<File | undefined>(undefined);
     const [uploadPicture, setUploadPicture] = useState(false);
-    const [menuItems, setMenuItems] = useState([{}]);
+    const [menuItems, setMenuItems] = useState<MenuItem[]>([{label: ""}]);
 
-    const fileInputRef = useRef(null);
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
-    const handleFileChange = (event) => {
-        const file = event.target.files[0];
+    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
         setUploadPicture(true);
         setProfilePictureFile(file);
         loadPicture(file);
     };
-    const handleProfilePictureClick = (event) => {
-        fileInputRef.current.click();
+    const handleProfilePictureClick = () => {
+        if (fileInputRef.current !== null) {
+            fileInputRef.current.click();
+        }
     };
 
-    const loadPicture = (file) => {
+    const loadPicture = (file?: File) => {
         const reader = new FileReader();
         reader.onloadend = () => {
-            setProfilePicture(reader.result);
+            const result = reader.result as string;
+            setProfilePicture(result);
         };
         if (file) {
             reader.readAsDataURL(file);
@@ -56,7 +60,9 @@ const MMProfile = () => {
         console.log(profilePicture);
         if (profilePicture) {
             const formData = new FormData();
-            formData.append('file', profilePictureFile);
+            if (profilePictureFile) {
+                formData.append('file', profilePictureFile);
+            }
 
             axios.post('/api/user/updateProfilePicture', formData, {headers: {"Authorization": `Bearer ${token}`}})
                 .then(response => {
@@ -80,7 +86,7 @@ const MMProfile = () => {
         {label: 'Logout', onClick: changeSetUserLoggingOut},
     ];
 
-    const menuItemsEmpty = [{}];
+    const menuItemsEmpty = [{label:""}];
 
     return (
         <div className="mmUserProfile mmProfileContainer">

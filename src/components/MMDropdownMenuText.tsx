@@ -1,11 +1,21 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {Link} from 'react-router-dom';
 
-const MMDropdownMenuButton = ({title, menuItems}) => {
+interface MenuItem {
+    label: string;
+    path?: string;
+    onClick?: () => void;
+}
+
+interface MMDropdownMenuTextProps {
+    title: string;
+    menuItems: MenuItem[];
+}
+const MMDropdownMenuText: React.FC<MMDropdownMenuTextProps> = ({ title, menuItems }) => {
 
     return (
         <div className="mmDropdown">
-            <button className="mmScience-btn">{title}</button>
+            <h1 className="mmName">{title}</h1>
             <div className="mmDropdown-menu">
                 {menuItems.map((item, index) => {
                     if (item.path) {
@@ -27,4 +37,4 @@ const MMDropdownMenuButton = ({title, menuItems}) => {
     );
 };
 
-export default MMDropdownMenuButton;
+export default MMDropdownMenuText;

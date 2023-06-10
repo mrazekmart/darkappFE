@@ -2,12 +2,15 @@ import React, {useContext, useEffect, useState} from "react";
 import axios from 'axios';
 import {BackGroundContext} from "../../BackGroundContext";
 
-const MMRegister = ({successfulRegister}) => {
+interface MMRegisterProps {
+    successfulRegister: () => void;
+}
+const MMRegister = ({successfulRegister}: MMRegisterProps) => {
     const [email, setEmail] = useState("");
     const [userName, setUserName] = useState("");
     const [password, setPassword] = useState("");
-    const [error, setError] = useState(null);
-    const [success, setSuccess] = useState(null);
+    const [error, setError] = useState<string | null>(null);
+    const [success, setSuccess] = useState<string | null>(null);
 
     const {resetLoginRegisterValue} = useContext(BackGroundContext);
 
@@ -19,7 +22,7 @@ const MMRegister = ({successfulRegister}) => {
         setSuccess(null);
     },[resetLoginRegisterValue])
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setError(null);
         setSuccess(null);
@@ -28,7 +31,7 @@ const MMRegister = ({successfulRegister}) => {
             await axios.post("/api/auth/register", {userName: userName, email: email, password: password});
             setSuccess('Registration successful');
             successfulRegister();
-        } catch (error) {
+        } catch (error: any) {
             if (error.response && error.response.status === 409) {
                 setError(error.response.data);
             } else {

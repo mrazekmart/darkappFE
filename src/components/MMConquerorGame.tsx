@@ -5,7 +5,6 @@ const MMConquerorGame = () => {
 
     return (
         <div className="mmContainer">
-            <MMRegister/>
         </div>);
 };
 

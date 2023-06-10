@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 
 const MMPerlinNoise = () => {
-    const [imageDataUrl, setImageDataUrl] = useState(null);
+    const [imageDataUrl, setImageDataUrl] = useState("");
     const [zoom, setZoom] = useState(50);
     const [density, setDensity] = useState(50);
     const [xCoord, setXCoord] = useState('');
@@ -42,18 +42,18 @@ const MMPerlinNoise = () => {
         fetchImage();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [zoom, density, xCoord, yCoord]);
-    const handleChange = (event) => {
-        setZoom(event.target.value);
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setZoom(Number(event.target.value));
     };
-    const handleChange2 = (event) => {
-        setDensity(event.target.value);
+    const handleChange2 = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setDensity(Number(event.target.value));
     };
 
-    const handleInputXCoord = (event) => {
+    const handleInputXCoord = (event: React.ChangeEvent<HTMLInputElement>) => {
         setXCoord(event.target.value);
     };
 
-    const handleInputYCoord = (event) => {
+    const handleInputYCoord = (event: React.ChangeEvent<HTMLInputElement>) => {
         setYCoord(event.target.value);
     };
 

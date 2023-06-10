@@ -56,7 +56,7 @@ function App() {
                     <div className="content-wrapper">
                         <MMBody/>
                         <Routes>
-                            <Route exact path="/" element={<MMSorting/>}/>
+                            <Route path="/" element={<MMSorting/>}/>
                             <Route path="/sorting/bubblesort" element={<MMSorting/>}/>
                             <Route path="/noises/perlin" element={<MMPerlinNoise/>}/>
                             <Route path="/games" element={<MMConquerorGame/>}/>

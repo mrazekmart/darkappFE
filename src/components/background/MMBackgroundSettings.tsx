@@ -12,7 +12,7 @@ const MMBackgroundSettings = () => {
     //const [blueColorBackground, setBlueColorBackground] = useState("255");
 
     const {backGroundZIndex, colorFractal, setColorFractal, colorBackground, setColorBackground, positionFractal, zoomFractal} = useContext(BackGroundContext);
-    const setRGBColor = (value, index, fractal) => {
+    const setRGBColor = (value: number, index: number, fractal: boolean) => {
         if (fractal) {
             let newColor = [...colorFractal];
             if (value === 255) {
@@ -31,7 +31,7 @@ const MMBackgroundSettings = () => {
             setColorBackground(newColor);
         }
     }
-    const handleSaveColor = async (e) => {
+    const handleSaveColor = async (e: React.MouseEvent) => {
         e.preventDefault();
         const token = localStorage.getItem('jwt');
         try {
@@ -56,7 +56,7 @@ const MMBackgroundSettings = () => {
                            max="255"
                            value={redColorBackground}
                            onChange={e => {
-                               setRGBColor(e.target.value, 0, false);
+                               setRGBColor(parseFloat(e.target.value), 0, false);
                                setRedColorBackground(e.target.value);
                            }}
                     />
@@ -66,7 +66,7 @@ const MMBackgroundSettings = () => {
                            max="255"
                            value={greenColorBackground}
                            onChange={e => {
-                               setRGBColor(e.target.value, 1, false);
+                               setRGBColor(parseFloat(e.target.value), 1, false);
                                setGreenColorBackground(e.target.value);
                            }}
                     />
@@ -88,7 +88,7 @@ const MMBackgroundSettings = () => {
                            max="255"
                            value={redColorFractal}
                            onChange={e => {
-                               setRGBColor(e.target.value, 0, true);
+                               setRGBColor(parseFloat(e.target.value), 0, true);
                                setRedColorFractal(e.target.value);
                            }}
                     />
@@ -98,7 +98,7 @@ const MMBackgroundSettings = () => {
                            max="255"
                            value={greenColorFractal}
                            onChange={e => {
-                               setRGBColor(e.target.value, 1, true);
+                               setRGBColor(parseFloat(e.target.value), 1, true);
                                setGreenColorFractal(e.target.value);
                            }}
                     />
@@ -108,7 +108,7 @@ const MMBackgroundSettings = () => {
                            max="255"
                            value={blueColorFractal}
                            onChange={e => {
-                               setRGBColor(e.target.value, 2, true);
+                               setRGBColor(parseFloat(e.target.value), 2, true);
                                setBlueColorFractal(e.target.value);
                            }}
                     />
