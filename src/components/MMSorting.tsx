@@ -67,6 +67,7 @@ const MMSorting = () => {
 
     useEffect(() => {
         createStepData(0);
+        // eslint-disable-next-line
     }, [sortedNumbersList]);
 
 

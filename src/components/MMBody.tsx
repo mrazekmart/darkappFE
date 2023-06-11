@@ -19,7 +19,7 @@ const MMBody = () => {
         resetLoginRegisterValue, setResetLoginRegisterValue,
         setUserNameProfile,
         setProfilePicture,
-        userLoggingOut, setUserLoggingOut,
+        userLoggingOut,
         isUserLoggedIn, setIsUserLoggedIn
     } = useContext(BackGroundContext);
 
@@ -97,6 +97,7 @@ const MMBody = () => {
                     title="Noises"
                     menuItems={[
                         {label: 'Perlin Noise', path: '/noises/perlin'},
+                        {label: 'Universe', path: '/noises/universe'},
                         {label: 'Noises Option 2', path: '/noises/option2'},
                     ]}
                 />

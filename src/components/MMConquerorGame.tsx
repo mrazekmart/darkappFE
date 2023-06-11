@@ -1,5 +1,4 @@
 import React from 'react';
-import MMRegister from "./login/MMRegister";
 
 const MMConquerorGame = () => {
 

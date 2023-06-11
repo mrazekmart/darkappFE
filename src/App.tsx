@@ -8,11 +8,12 @@ import MMBody from './components/MMBody';
 import MMSorting from "./components/MMSorting";
 import MMPerlinNoise from "./components/MMNoises";
 import MMConquerorGame from "./components/MMConquerorGame";
-import MMMandelBrot from "./components/MMMandelBrot";
+import MMMandelBrot from "./components/background/MMMandelBrot";
 import MMProfile from "./components/login/MMProfile";
 import MMBackgroundSettings from "./components/background/MMBackgroundSettings";
 import {BackGroundContext} from './BackGroundContext';
 import dp from "./dp.png";
+import MMUniverse from "./components/background/MMUniverse";
 
 function App() {
     const [backGroundZIndex, setBackGroundZIndex] = useState(-1);
@@ -59,6 +60,7 @@ function App() {
                             <Route path="/" element={<MMSorting/>}/>
                             <Route path="/sorting/bubblesort" element={<MMSorting/>}/>
                             <Route path="/noises/perlin" element={<MMPerlinNoise/>}/>
+                            <Route path="/noises/universe" element={<MMUniverse/>}/>
                             <Route path="/games" element={<MMConquerorGame/>}/>
                         </Routes>
                     </div>

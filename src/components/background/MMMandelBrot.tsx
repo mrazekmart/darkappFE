@@ -1,7 +1,7 @@
 import React, {useContext, useEffect, useRef} from 'react';
 import {useNavigate} from 'react-router-dom';
 import shader from 'glslify';
-import {BackGroundContext} from "../BackGroundContext";
+import {BackGroundContext} from "../../BackGroundContext";
 
 const MMMandelBrot = () => {
     const canvasRef: React.RefObject<HTMLCanvasElement> = useRef(null);
