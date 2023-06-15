@@ -1,6 +1,9 @@
 import React, {useEffect, useRef, useState} from "react";
 import * as THREE from 'three';
 
+import sunVertexShader from '../../shaders/universeShaders/sunVertexShader.glsl';
+import sunFragmentShader from '../../shaders/universeShaders/sunFragmentShader.glsl';
+
 interface SolarSystem {
     mainStar: Star;
     planets: Planet[];
@@ -171,6 +174,8 @@ const MMUniverse = () => {
         zoomLevel: number
     ) {
 
+        console.log(sunVertexShader);
+
         const renderer = new THREE.WebGLRenderer({canvas, context: canvas.getContext("webgl2") as WebGLRenderingContext});
         renderer.setSize(canvas.width, canvas.height);
         renderer.setClearColor(0x000000);
@@ -184,11 +189,6 @@ const MMUniverse = () => {
         );
         camera.position.z = 300 * zoomLevel;
 
-        /*        if(!isStarBackgroundSet){
-                    generateStarryBackground(scene, canvas.width, canvas.height);
-                    //setIsStarBackgroundSet(true);
-                }*/
-
         for (let i = 0; i < solarSystem.stars.length; i++) {
             const currStar = solarSystem.stars[i];
             const starColor = new THREE.Color(currStar.color[0], currStar.color[1], currStar.color[2]);
@@ -199,45 +199,23 @@ const MMUniverse = () => {
             scene.add(starMesh);
         }
 
-        const sunGeometry = new THREE.CircleGeometry(200, 32);
-        const sunMaterial = new THREE.ShaderMaterial({
-            vertexShader: `
-    varying vec2 vUv;
-
-    void main() {
-        vUv = uv;
-        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-    }
-`,
-            fragmentShader: `
-        precision highp float;
-        
-        uniform float time;
-        uniform vec2 resolution;
-        varying vec2 vUv;
-
-        void main() {
-            // Calculate the coordinates of the pixel in the texture
-            vec2 uv = vUv;
-            uv -= 0.5;
-            uv *= 10.0;
-            
-            // Add time to create dynamic patterns
-            float t = time * 0.1;
-            
-            // Calculate color based on the pixel position and time
-            vec3 color = vec3(
-                abs(sin(uv.x + t)),
-                abs(cos(uv.y + t)),
-                abs(sin((uv.x + uv.y) + t))
-            );
-
-            gl_FragColor = vec4(color, 1.0);
-        }
-    `,
+        const sunGeometry = new THREE.SphereGeometry(200, 30, 30);
+        //const sunMaterial = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
+        const shaderMaterial = new THREE.ShaderMaterial({
+            uniforms: {
+                time: { value: 0.0 }
+            },
+            vertexShader: sunVertexShader,
+            fragmentShader: sunFragmentShader
         });
 
-        const sunMesh = new THREE.Mesh(sunGeometry, sunMaterial);
+        function animate() {
+            requestAnimationFrame(animate);
+            shaderMaterial.uniforms.time.value += 0.001;
+            renderer.render(scene, camera);
+        }
+
+        const sunMesh = new THREE.Mesh(sunGeometry, shaderMaterial);
         sunMesh.position.set(0, 0, 10);
         scene.add(sunMesh);
 
@@ -290,7 +268,7 @@ const MMUniverse = () => {
                 scene.add(moonMesh);
             }
         }
-        renderer.render(scene, camera);
+        animate();
     }
 
     const handleZoom: React.WheelEventHandler<HTMLDivElement> = (event => {
