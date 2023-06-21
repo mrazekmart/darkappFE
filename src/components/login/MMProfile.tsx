@@ -78,7 +78,6 @@ const MMProfile = () => {
         }else{
             setMenuItems(menuItemsEmpty);
         }
-        console.log(menuItems);
         // eslint-disable-next-line
     }, [isUserLoggedIn]);
 

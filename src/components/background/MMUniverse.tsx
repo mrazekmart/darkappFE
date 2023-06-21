@@ -1,9 +1,6 @@
 import React, {useEffect, useRef, useState} from "react";
 import * as THREE from 'three';
 
-import sunVertexShader from '../../shaders/universeShaders/sunVertexShader.glsl';
-import sunFragmentShader from '../../shaders/universeShaders/sunFragmentShader.glsl';
-
 interface SolarSystem {
     mainStar: Star;
     planets: Planet[];
@@ -41,6 +38,31 @@ const MMUniverse = () => {
     const [maxWidth] = useState<number>(5000);
     const [maxHeight] = useState<number>(5000);
 
+    const [sunVShader, setSunVShader] = useState("");
+    const [sunFShader, setSunFShader] = useState("");
+    const [cubeVShader, setCubeVShader] = useState("");
+    const [cubeFShader, setCubeFShader] = useState("");
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        Promise.all([
+            fetch('/universeShaders/sunVertexShader.glsl').then(response => response.text()),
+            fetch('/universeShaders/sunFragmentShader.glsl').then(response => response.text()),
+            fetch('/universeShaders/cubeVertexShader.glsl').then(response => response.text()),
+            fetch('/universeShaders/cubeFragmentShader.glsl').then(response => response.text())
+        ])
+            .then(([sunVShaderData, sunFShaderData, cubeVShaderData, cubeFShaderData]) => {
+                setSunVShader(sunVShaderData);
+                setSunFShader(sunFShaderData);
+                setCubeVShader(cubeVShaderData);
+                setCubeFShader(cubeFShaderData);
+                setLoading(false);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    }, []);
+
     useEffect(() => {
         setSolarSystem(generateSolarSystem);
         // eslint-disable-next-line
@@ -50,21 +72,19 @@ const MMUniverse = () => {
 
         const canvas = canvasRef.current;
 
-        if (!canvas) {
-            return;
-        }
+        if (!canvas) return;
 
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
 
-        if (!solarSystem) {
-            return;
-        }
+        if (!solarSystem) return;
+
+        if (loading) return;
 
         renderSolarSystem(solarSystem, canvas, zoom);
 
 
-    }, [solarSystem, zoom]);
+    }, [solarSystem, zoom, sunVShader]);
 
     function generateSolarSystem() {
         let sunSize = 100;
@@ -146,6 +166,7 @@ const MMUniverse = () => {
 
         return solarSystem;
     }
+
     const generateNoiseTexture = () => {
         const size = 512;
         const data = new Uint8Array(size * size * 3);
@@ -174,9 +195,10 @@ const MMUniverse = () => {
         zoomLevel: number
     ) {
 
-        console.log(sunVertexShader);
-
-        const renderer = new THREE.WebGLRenderer({canvas, context: canvas.getContext("webgl2") as WebGLRenderingContext});
+        const renderer = new THREE.WebGLRenderer({
+            canvas,
+            context: canvas.getContext("webgl2") as WebGLRenderingContext
+        });
         renderer.setSize(canvas.width, canvas.height);
         renderer.setClearColor(0x000000);
         renderer.clear();
@@ -199,25 +221,37 @@ const MMUniverse = () => {
             scene.add(starMesh);
         }
 
-        const sunGeometry = new THREE.SphereGeometry(200, 30, 30);
+
+
+        let cubeRenderTarget = new THREE.WebGLCubeRenderTarget( 256 );
+        cubeRenderTarget.texture.type = THREE.HalfFloatType;
+
+        let cubeCamera = new THREE.CubeCamera( 1, 1000, cubeRenderTarget );
+
+
+
         //const sunMaterial = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
-        const shaderMaterial = new THREE.ShaderMaterial({
+        const materialPerlin = new THREE.ShaderMaterial({
             uniforms: {
-                time: { value: 0.0 }
+                time: {value: 0.0}
             },
-            vertexShader: sunVertexShader,
-            fragmentShader: sunFragmentShader
+            vertexShader: cubeVShader,
+            fragmentShader: cubeFShader
         });
+
+        const geometry = new THREE.SphereGeometry(200, 30, 30);
+        const perlin = new THREE.Mesh(geometry, materialPerlin);
+        perlin.position.set(0, 0, 10);
+        scene.add(perlin);
+
 
         function animate() {
             requestAnimationFrame(animate);
-            shaderMaterial.uniforms.time.value += 0.001;
+            materialPerlin.uniforms.time.value += 0.0008;
             renderer.render(scene, camera);
+            cubeCamera.update(renderer, scene);
         }
 
-        const sunMesh = new THREE.Mesh(sunGeometry, shaderMaterial);
-        sunMesh.position.set(0, 0, 10);
-        scene.add(sunMesh);
 
         const numPlanets = solarSystem.planets.length;
 
