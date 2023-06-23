@@ -1,5 +1,23 @@
-/* !!! Profile !!! */
+.hoverable {
+    position: relative;
+}
 
+.tooltip {
+    position: absolute;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    padding: 5px;
+    border-radius: 6px;
+    z-index: 1;
+    transition: 0.3s;
+}
+
+.hoverable:hover .tooltip {
+    visibility: visible;
+}
+
+/* !!! Profile !!! */
 .mmUserProfileButton{
     background: transparent;
     border: none;

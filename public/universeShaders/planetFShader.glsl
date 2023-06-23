@@ -1,5 +1,5 @@
 uniform float pOffset;
-varying vec2 vUv;
+varying vec3 vNormal;
 
 vec4 mod289(vec4 x) {
     return x - floor(x * (1.0 / 289.0)) * 289.0;
@@ -144,7 +144,7 @@ vec3 brightToColor(float b){
 }
 
 void main() {
-    float noisy = fmb(vec4(vUv*50., .4, 1));
+    float noisy = fmb(vec4(vNormal*5., 1.));
     //gl_FragColor = vec4(color, 1.);
     vec3 col = brightToColor(noisy);
     gl_FragColor = vec4(col, 1.);

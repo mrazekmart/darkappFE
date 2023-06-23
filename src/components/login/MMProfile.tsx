@@ -57,7 +57,6 @@ const MMProfile = () => {
 
     const handleSubmit = () => {
         const token = localStorage.getItem('jwt');
-        console.log(profilePicture);
         if (profilePicture) {
             const formData = new FormData();
             if (profilePictureFile) {
