@@ -52,8 +52,12 @@ interface Star {
 interface Moon {
     name: string;
     size: number;
-    position: number[];
+    distance: number;
     color: number[];
+    angle1: number;
+    angle2: number;
+    rotationSpeed1: number;
+    rotationSpeed2: number;
 }
 
 type UpdateSystem = {
@@ -63,6 +67,7 @@ type UpdateSystem = {
     planet: any;
     cloud: any;
     rings: Array<any>;
+    moons: Array<any>;
 };
 
 
@@ -191,17 +196,15 @@ const MMUniverse = () => {
                 let angle2 = Math.random() * 360;
                 let distance = getRandomNumber(planet.size * 5, 500);
 
-                let moonPosition = [
-                    distance * Math.sin(angle1) * Math.cos(angle2),
-                    distance * Math.sin(angle1) * Math.sin(angle2),
-                    distance * Math.cos(angle1)
-                ];
-
                 const moon = {
                     name: `Moon ${j + 1}`,
                     size: getRandomNumber(6, planet.size / 2),
-                    position: moonPosition,
+                    distance: distance,
                     color: getRandomColor(),
+                    angle1: angle1,
+                    angle2: angle2,
+                    rotationSpeed1: (getRandomNumber(0, 10) - 5) / 100,
+                    rotationSpeed2: (getRandomNumber(0, 10) - 5) / 100,
                 };
 
                 planet.moons.push(moon);
@@ -294,7 +297,6 @@ const MMUniverse = () => {
         const numPlanets = solarSystem.planets.length;
 
         const cloudMaterials: any = [];
-        const planets: any = [[]];
 
         const updateSystem: UpdateSystem[] = [];
 
@@ -315,11 +317,10 @@ const MMUniverse = () => {
             }
 
             const planetMesh = new THREE.Mesh(planetGeometry, planetMaterial);
-            let position = calculatePositon(planet.distanceFromSun, planet.angle);
+            let position = calculatePosition(planet.distanceFromSun, planet.angle);
             planetMesh.position.set(position[0], position[1], 0);
             planetMesh.name = planetNames[Math.floor(getRandomFloat(0, 99))];
             scene.add(planetMesh);
-            console.log(planet.angle);
 
             const cloudGeometry = new THREE.SphereGeometry(planet.size + 1, 32);
             const cloudMaterial = new THREE.ShaderMaterial({
@@ -357,7 +358,7 @@ const MMUniverse = () => {
                         },
                         vertexShader: planetRingVShader,
                         fragmentShader: planetRingFShader,
-                        transparent: false,
+                        transparent: true,
                     });
                     const ring = new THREE.Mesh(ringGeometry, ringMaterial);
                     ring.position.set(position[0], position[1], 0);
@@ -395,13 +396,12 @@ const MMUniverse = () => {
                     fragmentShader: moonFShader
                 });
                 const moonMesh = new THREE.Mesh(moonGeometry, moonMaterial);
-                moonMesh.position.set(position[0] + moon.position[0], position[1] + moon.position[1], moon.position[2]);
+                let moonPosition = calculate3Position(moon.distance, moon.angle1, moon.angle2);
+                moonMesh.position.set(position[0] + moonPosition[0], position[1] + moonPosition[1], moonPosition[2]);
                 scene.add(moonMesh);
-                moons.push(moonMesh);
+                moons.push([moonMesh, moon.angle1, moon.angle2, moon.rotationSpeed1, moon.rotationSpeed2, moon.distance]);
             }
-            //funny bug
-            //planets.push([planet.distanceFromSun, planet.angle, planetMesh, clouds, orbit, moons]);
-            //planets.push([planet.distanceFromSun, planet.angle, planetMesh, clouds, rings, moons]);
+
             updateSystem.push({
                 distance: planet.distanceFromSun,
                 angle: planet.angle,
@@ -409,6 +409,7 @@ const MMUniverse = () => {
                 planet: planetMesh,
                 cloud: clouds,
                 rings: rings,
+                moons: moons
             })
         }
 
@@ -448,23 +449,38 @@ const MMUniverse = () => {
                 });
             }
             if (updateSystem.length > 0) {
-                updateSystem.forEach((planet: any) => {
-                    planet.angle += planet.rotatingSpeed;
-                    let position = calculatePositon(planet.distance, planet.angle);
-                    if (planet.planet) {
-                        planet.planet.position.set(position[0], position[1], 0);
-                        planet.planet.rotation.x += 0.01;
+                updateSystem.forEach((system: any) => {
+                    system.angle += system.rotatingSpeed;
+                    let position = calculatePosition(system.distance, system.angle);
+                    if (system.planet) {
+                        system.planet.position.set(position[0], position[1], 0);
+                        system.planet.rotation.x += 0.01;
                         //planet.planet.angle.set(planet.planet.angle + 1);
                     }
-                    if (planet.cloud) {
-                        planet.cloud.position.set(position[0], position[1], 0);
-                        planet.cloud.rotation.x += 0.01;
+                    if (system.cloud) {
+                        system.cloud.position.set(position[0], position[1], 0);
+                        system.cloud.rotation.x += 0.01;
                     }
-                    if (planet.rings) {
-                        if (planet.rings.length > 0) {
-                            planet.rings.forEach((ring: any) => {
+                    if (system.rings) {
+                        if (system.rings.length > 0) {
+                            system.rings.forEach((ring: any) => {
                                 ring.position.set(position[0], position[1], 0);
                             })
+                        }
+                    }
+                    if (system.moons) {
+                        if (system.moons.length > 0) {
+                            for (let i = 1; i < system.moons.length; i++) {
+                                let moon = system.moons[i];
+                                moon[1] += moon[3];
+                                //moon[2] += moon[4];
+                                let moonPosition = calculate3Position(moon[5], moon[1], moon[2]);
+                                moon[0].position.set(position[0] + moonPosition[0],
+                                    position[1] + moonPosition[1],
+                                    moonPosition[2]);
+
+                            }
+
                         }
                     }
                 });
@@ -579,8 +595,15 @@ const MMUniverse = () => {
         setMousePos({x: e.clientX, y: e.clientY});
     };
 
-    function calculatePositon(distance: number, angle: number): number[] {
+    function calculatePosition(distance: number, angle: number): number[] {
         return [distance * Math.cos(angle), distance * Math.sin(angle)];
+    }
+
+    function calculate3Position(distance: number, angle1: number, angle2: number): number[] {
+        return [distance * Math.sin(angle1) * Math.cos(angle2),
+            distance * Math.sin(angle1) * Math.sin(angle2),
+            distance * Math.cos(angle1)];
+
     }
 
     return (
