@@ -14,6 +14,7 @@ import MMBackgroundSettings from "./components/background/MMBackgroundSettings";
 import {BackGroundContext} from './BackGroundContext';
 import dp from "./dp.png";
 import MMUniverse from "./components/background/MMUniverse";
+import MMPlanet from "./components/universe/MMPlanet";
 
 function App() {
     const [backGroundZIndex, setBackGroundZIndex] = useState(-1);
@@ -60,8 +61,8 @@ function App() {
                             <Route path="/" element={<MMSorting/>}/>
                             <Route path="/sorting/bubblesort" element={<MMSorting/>}/>
                             <Route path="/noises/perlin" element={<MMPerlinNoise/>}/>
-                            <Route path="/noises/universe" element={<MMUniverse/>}/>
-                            <Route path="/games" element={<MMConquerorGame/>}/>
+                            <Route path="/noises/planet" element={<MMPlanet/>}/>
+                            <Route path="/universe" element={<MMUniverse/>}/>
                         </Routes>
                     </div>
                     <Footer/>

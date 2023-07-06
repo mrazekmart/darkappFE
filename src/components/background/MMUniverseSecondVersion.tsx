@@ -72,6 +72,18 @@ type UpdateSystem = {
     moons: Array<any>;
 };
 
+interface MMPlanet {
+    planetName: string;
+    planetType: number;
+    modelData: any;
+    moons: MMMoon[];
+}
+
+interface MMMoon {
+    moonName: string;
+}
+
+
 const MMUniverse = () => {
     const canvasRef: React.RefObject<HTMLCanvasElement> = useRef(null);
 
@@ -95,10 +107,61 @@ const MMUniverse = () => {
     const speed = useRef(0);
     const superSpeed = useRef(false);
     const direction = useRef(new THREE.Vector3());
+    const specialMesh = useRef(new THREE.Mesh());
+
 
     const isDragging = useRef(false);
     const startPosition = useRef({x: 0, y: 0});
     const currentPosition = useRef({x: 0, y: 0});
+
+    const [mainPlanet, setMainPlanet] = useState<MMPlanet>();
+
+    const getPlanet = async () => {
+        const token = localStorage.getItem('jwt');
+        try {
+            const response = await axios.get("/api/planet/getPlanet", {headers: {"Authorization": `Bearer ${token}`}});
+            if (response.data) {
+                let moon: MMMoon = {moonName: 'Moon2'};
+                const planet: MMPlanet = {
+                    planetName: response.data.planet_name,
+                    planetType: response.data.planet_type,
+                    modelData: response.data.model_data,
+                    moons: [moon]
+                }
+                setMainPlanet(planet);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    function loadModel(url: string): Promise<THREE.Mesh> {
+        const loader = new GLTFLoader();
+
+        return new Promise((resolve, reject) => {
+            loader.load(
+                url,
+                (gltf) => {
+                    let mesh: THREE.Mesh | null = null;
+
+                    gltf.scene.traverse((node) => {
+                        if (node instanceof THREE.Mesh) {
+                            node.scale.set(2, 2, 2); // Scale the size of your model by 2 in the x, y and z direction
+                            mesh = node; // assign the mesh to your variable
+                        }
+                    });
+
+                    if (mesh) {
+                        resolve(mesh);
+                    } else {
+                        reject(new Error('No mesh in the model'));
+                    }
+                },
+                undefined, // onProgress callback not needed
+                (error) => reject(error)
+            );
+        });
+    }
 
     useEffect(() => {
         Promise.all([
@@ -111,7 +174,8 @@ const MMUniverse = () => {
             fetch('/universeShaders/moonVShader.glsl').then(response => response.text()),
             fetch('/universeShaders/moonFShader.glsl').then(response => response.text()),
             fetch('/universeShaders/planetRingsVShader.glsl').then(response => response.text()),
-            fetch('/universeShaders/planetRingsFShader.glsl').then(response => response.text())
+            fetch('/universeShaders/planetRingsFShader.glsl').then(response => response.text()),
+            getPlanet()
         ])
             .then(([sunVShaderData, sunFShaderData, cubeVShaderData, cubeFShaderData,
                        cloudVShaderData, cloudFShaderData, moonVShaderData, moonFShaderData,
@@ -266,6 +330,10 @@ const MMUniverse = () => {
         );
         camera.position.setZ(10000);
 
+        const light = new THREE.PointLight(0xffffff, 20, 10000);
+        light.position.set(0, 0, 0);
+        scene.add(light);
+
         for (let i = 0; i < solarSystem.stars.length; i++) {
             const currStar = solarSystem.stars[i];
             const starColor = new THREE.Color(currStar.color[0], currStar.color[1], currStar.color[2]);
@@ -321,7 +389,35 @@ const MMUniverse = () => {
             planetMesh.position.set(position[0], position[1], 0);
             planetMesh.name = planetNames[Math.floor(getRandomFloat(0, 99))];
 
-            scene.add(planetMesh);
+
+            async function loadAndAddModel(url: string) {
+                try {
+                    specialMesh.current = await loadModel(url);
+                    specialMesh.current.position.set(position[0], position[1], 0);
+                    specialMesh.current.scale.set(100, 100, 100);
+                    scene.add(specialMesh.current);
+                } catch (error) {
+                    console.error(error);
+                }
+            }
+
+            if(i === 0){
+
+                console.log(mainPlanet);
+                let binaryData = atob(mainPlanet?.modelData);
+
+                let arrayBuffer = new Uint8Array(binaryData.length);
+                for (let i = 0; i < binaryData.length; i++) {
+                    arrayBuffer[i] = binaryData.charCodeAt(i);
+                }
+                let blob = new Blob([arrayBuffer], {type: 'model/gltf-binary'});
+                let url = URL.createObjectURL(blob);
+
+                loadAndAddModel(url);
+            }else{
+                scene.add(planetMesh);
+            }
+
 
             const cloudGeometry = new THREE.SphereGeometry(planet.size + 1, 32);
             const cloudMaterial = new THREE.ShaderMaterial({
@@ -450,9 +546,13 @@ const MMUniverse = () => {
                 });
             }
             if (updateSystem.length > 0) {
-                updateSystem.forEach((system: any) => {
+                updateSystem.forEach((system: any, index: number) => {
                     system.angle += system.rotatingSpeed;
                     let position = calculatePosition(system.distance, system.angle);
+                    if(index === 0){
+                        specialMesh.current.position.set(position[0], position[1], 0);
+                        specialMesh.current.rotation.x += 0.003;
+                    }
                     if (system.planet) {
                         system.planet.position.set(position[0], position[1], 0);
                         system.planet.rotation.x += 0.01;

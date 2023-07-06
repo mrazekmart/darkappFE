@@ -97,7 +97,7 @@ const MMBody = () => {
                     title="Noises"
                     menuItems={[
                         {label: 'Perlin Noise', path: '/noises/perlin'},
-                        {label: 'Universe', path: '/noises/universe'},
+                        {label: 'Planet', path: '/noises/planet'},
                         {label: 'Noises Option 2', path: '/noises/option2'},
                     ]}
                 />
@@ -110,7 +110,7 @@ const MMBody = () => {
                 <MMDropdownMenuButton
                     title="Games"
                     menuItems={[
-                        {label: 'Conquer', path: '/games'},
+                        {label: 'Universe', path: '/universe'},
                     ]}
                 />
             </div>
