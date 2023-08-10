@@ -18,7 +18,7 @@
 }
 
 /* !!! Profile !!! */
-.mmUserProfileButton{
+.mmUserProfileButton {
     background: transparent;
     border: none;
 }
@@ -39,7 +39,7 @@
     margin-bottom: 10px;
 }
 
-.mmProfileContainer{
+.mmProfileContainer {
     display: flex;
     flex-direction: column;
     position: absolute;
@@ -61,6 +61,7 @@
     height: 100vh;
     z-index: -1;
 }
+
 /* !!!!! */
 
 /* !!! LOGIN FORM !!! */
@@ -130,6 +131,72 @@
 
 /* !!!!! */
 
+/* !!! RECIPE !!! */
+
+.mmAddRecipeButton {
+    font-family: Arial, sans-serif;
+    font-size: 18px;
+    color: #fff;
+    background-color: #4caf50;
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.mmAddRecipeButton:hover {
+    background-color: #45a049;
+}
+
+.mmIsPrivateCheckbox {
+    position: absolute;
+    margin-top: 15px;
+}
+
+.mmRecipeItems {
+    display: grid;
+    margin: 10px;
+    align-items: center;
+    border: 7px solid #ddd;
+}
+.mmRecipeItem {
+    width: 100%;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    font-size: 16px;
+    color: #1d1db2;
+    line-height: 24px;
+    font-family: 'Georgia', serif;
+    border: 1px solid #e5b1b1;
+    background-color: #ecb9b9;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    transition: border 0.3s ease;
+}
+
+.mmRecipeItemsHead {
+    display: grid;
+    font-size: 20px;
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    align-items: center;
+    grid-template-columns: 2fr 1fr 1fr 5fr 1fr;
+}
+
+.mmRecipeContainerTop {
+    display: flex;
+    flex-direction: column;
+    width: 800px;
+}
+
+
+/* !!!!! */
+
 
 /* !!! TITLE STYLE !!! */
 .mmTitle-container {
@@ -194,8 +261,17 @@
     background-color: #00796b;
 }
 
-.mmScience-btn:active {
-    transform: scale(0.98);
+.mmCustomizeBackground-btn {
+    background-color: #B22222;
+    font-size: 11px;
+    max-width: 120px;
+    margin: 10px 10px 10px 80px;
+    padding: 10px;
+    position: absolute;
+}
+
+.mmCustomizeBackground-btn:hover {
+    background-color: #601111;
 }
 
 .mmRegisterButtonsContainer {
@@ -231,8 +307,19 @@
     position: absolute;
     padding-top: 10px;
     min-width: 160px;
+    width: max-content;
     box-shadow: none;
     z-index: 1;
+}
+
+.mmDropdown-menu :first-child {
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+}
+
+.mmDropdown-menu :last-child {
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
 }
 
 .mmDropdown:hover .mmDropdown-menu {
@@ -240,15 +327,18 @@
 }
 
 .mmDropdown-item {
-    color: black;
-    padding: 12px 16px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: #ffffff;
     text-decoration: none;
     display: block;
-    background-color: #f9f9f9;
+    padding: 12px 24px;
+    background-color: #009688;
 }
 
 .mmDropdown-item:hover {
-    background-color: #f1f1f1;
+    background-color: #00796b;
 }
 
 /*!!!!!*/
@@ -274,11 +364,25 @@
     margin-top: 10px;
     backdrop-filter: blur(3px);
     background-color: rgba(168, 69, 79, 0.6);
-    display: inline-block;
+    /*display: inline-block;*/
+    display: flex;
+
 }
 
 .mmContainerWrapper {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
     text-align: center;
+}
+
+.mmBodyHeader {
+    font-family: 'Roboto', sans-serif;
+    font-size: 48px;
+    -webkit-text-stroke: 1px black;
+    font-weight: 700;
+    color: #58ffe3;
+    margin: 0;
 }
 
 .mmContainerDown {
@@ -433,6 +537,9 @@
 .background-red {
     background: red;
 }
+.delete-red {
+    background: #e76161;
+}
 
 .background-green {
     background: green;
@@ -441,6 +548,11 @@
 .background-blue {
     background: blue;
 }
-.background-transparent{
+
+.background-transparent {
     background: transparent;
+}
+
+.min-width-800 {
+    min-width: 800px;
 }

@@ -1,7 +1,5 @@
 import React, {useEffect, useRef, useState} from "react";
 import * as THREE from 'three';
-import axios from "axios";
-import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader";
 
 let planetNames: string[] = [
     "Zephyron", "Qualthor", "Braxon", "Phaedra", "Nylex",
@@ -92,6 +90,7 @@ const MMUniverse = () => {
 
     const [loading, setLoading] = useState(true);
 
+    const animationId = useRef<number | null>(null);
     const speed = useRef(0);
     const superSpeed = useRef(false);
     const direction = useRef(new THREE.Vector3());
@@ -99,6 +98,8 @@ const MMUniverse = () => {
     const isDragging = useRef(false);
     const startPosition = useRef({x: 0, y: 0});
     const currentPosition = useRef({x: 0, y: 0});
+
+    const containerRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
         Promise.all([
@@ -413,12 +414,14 @@ const MMUniverse = () => {
                 moons: moons
             })
         }
-
+        if (containerRef.current) {
+            containerRef.current.appendChild(renderer.domElement);
+        }
         let timer: number = 0;
 
         function animate() {
 
-            requestAnimationFrame(animate);
+            animationId.current = requestAnimationFrame(animate);
             const delta: number = clock.getDelta();
             timer += delta;
             if (timer < 0.02) {
@@ -529,16 +532,14 @@ const MMUniverse = () => {
             isDragging.current = false;
         };
 
-        const handleMouseMove = (event: MouseEvent) => {
-            if (isDragging.current) {
-                currentPosition.current = {x: event.clientX, y: event.clientY};
-            }
-        };
-
         let raycaster = new THREE.Raycaster();
         let mouse = new THREE.Vector2();
 
         const onMouseMove = (event: MouseEvent) => {
+
+            if (isDragging.current) {
+                currentPosition.current = {x: event.clientX, y: event.clientY};
+            }
 
             mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
             mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
@@ -570,15 +571,41 @@ const MMUniverse = () => {
 
         canvas.addEventListener('mousedown', handleMouseDown, false);
         canvas.addEventListener('mouseup', handleMouseUp, false);
-        canvas.addEventListener('mousemove', handleMouseMove, false);
         canvas.addEventListener('mousemove', onMouseMove, false);
         return () => {
             canvas.removeEventListener('keydown', handleKeyDown);
             canvas.removeEventListener('keyup', handleKeyUp);
             canvas.removeEventListener('mousedown', handleMouseDown, false);
             canvas.removeEventListener('mouseup', handleMouseUp, false);
-            canvas.removeEventListener('mousemove', handleMouseMove, false);
             canvas.removeEventListener('mousemove', onMouseMove, false);
+
+            if (animationId.current) {
+                cancelAnimationFrame(animationId.current);
+            }
+
+            scene.traverse((object) => {
+                if (!(object instanceof THREE.Mesh)) return;
+
+                object.geometry.dispose();
+
+                if (Array.isArray(object.material)) {
+                    for (const material of object.material) {
+                        cleanMaterial(material);
+                    }
+                } else {
+                    cleanMaterial(object.material);
+                }
+            });
+
+            while (scene.children.length > 0) {
+                scene.remove(scene.children[0]);
+            }
+
+            renderer.dispose();
+            if (containerRef.current) {
+                containerRef.current.removeChild(renderer.domElement);
+            }
+
         };
     }
 
@@ -587,7 +614,19 @@ const MMUniverse = () => {
     const [tooltipVisible, setTooltipVisible] = useState(false);
     const [tooltipText, setTooltipText] = useState("");
 
-    const handleMouseMove = (e: any) => {
+    function cleanMaterial(material: any) {
+        material.dispose();
+
+        // dispose textures
+        for (const key of Object.keys(material)) {
+            const value = material[key];
+            if (value && typeof value === 'object' && 'dispose' in value) {
+                value.dispose();
+            }
+        }
+    }
+
+    const handleMousePos = (e: any) => {
         setMousePos({x: e.clientX, y: e.clientY});
     };
 
@@ -604,8 +643,7 @@ const MMUniverse = () => {
 
     return (
         <div style={{position: "relative"}}>
-            <canvas ref={canvasRef} onMouseMove={handleMouseMove} style={{position: "fixed", top: 0, left: 0}}/>
-
+            <canvas ref={canvasRef} onMouseMove={handleMousePos} style={{position: "fixed", top: 0, left: 0}}/>
 
             {tooltipVisible && (<span
                 className="tooltip"
@@ -616,7 +654,6 @@ const MMUniverse = () => {
             >
             {tooltipText}
             </span>)}
-
         </div>
     );
 }

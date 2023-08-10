@@ -60,6 +60,7 @@ const MMPerlinNoise = () => {
 
     return (
         <div className="mmContainerWrapper">
+            <h1 className="mmBodyHeader"> Perlin Noise </h1>
             <div className="mmContainer">
                 <div className="mmContainerTop flex-direction-row-space-10">
                     <div className="flex-direction-column">

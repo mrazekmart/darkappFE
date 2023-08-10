@@ -4,7 +4,7 @@ import MMModal from "./MMModal";
 import MMRegister from "./login/MMRegister";
 import MMLogin from "./login/MMLogin";
 import {BackGroundContext} from "../BackGroundContext";
-import axios from "axios";
+import {getUserProfileSettings} from './api/MMApiServices';
 
 const MMBody = () => {
     const [registerShow, setRegisterShow] = useState(false);
@@ -39,10 +39,21 @@ const MMBody = () => {
     }
     const successfulLogin = () => {
         handleLoginClose();
-        getUserProfileSettings();
-        setIsUserLoggedIn(true);
-        setResetLoginRegisterValue(!resetLoginRegisterValue);
-        setShowRegisterButton(false);
+        getUserProfileSettings(
+            setColorFractal,
+            setColorBackground,
+            setPositionFractal,
+            setZoomFractal,
+            setProfilePicture
+        )
+            .then(() => {
+                setIsUserLoggedIn(true);
+                setResetLoginRegisterValue(!resetLoginRegisterValue);
+                setShowRegisterButton(false);
+            })
+            .catch(err => {
+                console.error(err);
+            });
     }
     const successfulLogout = () => {
         localStorage.removeItem('jwt');
@@ -64,41 +75,20 @@ const MMBody = () => {
         // eslint-disable-next-line
     }, [userLoggingOut]);
 
-    const getUserProfileSettings = async () => {
-        const token = localStorage.getItem('jwt');
-        try {
-            const response = await axios.get("/api/user/getUserProfileSettings", {headers: {"Authorization": `Bearer ${token}`}});
-            if (response.data) {
-                setColorFractal(response.data.mmFractalInfo.colorFractal);
-                setColorBackground(response.data.mmFractalInfo.colorBackground);
-                setPositionFractal(response.data.mmFractalInfo.positionFractal);
-                setZoomFractal(response.data.mmFractalInfo.zoomFractal);
-                if(response.data.userProfilePicture){
-                    const imageDataUrl = `data:image/png;base64,${response.data.userProfilePicture}`;
-                    setProfilePicture(imageDataUrl);
-                }
-            }
-        } catch (error) {
-            console.log(error);
-        }
-    };
-
     return (
         <div className="d-flex flex-wrap mmBtn-container">
             <div>
-                <MMDropdownMenuButton
-                    title="Sorting"
-                    menuItems={[
-                        {label: 'BubbleSort', path: '/sorting/bubblesort'},
-                        {label: 'QuickSort', path: '/sorting/quicksort'},
-                    ]}
-                />
                 <MMDropdownMenuButton
                     title="Noises"
                     menuItems={[
                         {label: 'Perlin Noise', path: '/noises/perlin'},
                         {label: 'Planet', path: '/noises/planet'},
-                        {label: 'Noises Option 2', path: '/noises/option2'},
+                    ]}
+                />
+                <MMDropdownMenuButton
+                    title="Sorting"
+                    menuItems={[
+                        {label: 'BubbleSort', path: '/sorting/bubblesort'},
                     ]}
                 />
                 <MMDropdownMenuButton
@@ -108,11 +98,21 @@ const MMBody = () => {
                     ]}
                 />
                 <MMDropdownMenuButton
-                    title="Games"
+                    title="Universe"
                     menuItems={[
-                        {label: 'Universe', path: '/universe'},
+                        {label: 'Randomly generated universe', path: '/universe'},
                     ]}
                 />
+                <MMDropdownMenuButton
+                    title="Recipes"
+                    menuItems={[
+                        {label: 'Air fryer recipes', path: '/recipe'},
+                    ]}
+                />
+                <button className="mmScience-btn mmCustomizeBackground-btn"
+                        onClick={() => setBackGroundZIndex(10)}>
+                    Customize background!
+                </button>
             </div>
             <div className="mmRegisterButtonsContainer">
                 {showRegisterButton && (
@@ -120,7 +120,7 @@ const MMBody = () => {
                 }
                 {showRegisterButton &&
                     <button className="mmScience-btn mmRegisterButton"
-                        onClick={handleLogInOutButton}>Login</button>
+                            onClick={handleLogInOutButton}>Login</button>
                 }
             </div>
             <MMModal show={registerShow} handleClose={handleRegisterClose}>

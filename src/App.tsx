@@ -7,16 +7,19 @@ import Footer from './components/MMfooter';
 import MMBody from './components/MMBody';
 import MMSorting from "./components/MMSorting";
 import MMPerlinNoise from "./components/MMNoises";
-import MMConquerorGame from "./components/MMConquerorGame";
 import MMMandelBrot from "./components/background/MMMandelBrot";
 import MMProfile from "./components/login/MMProfile";
 import MMBackgroundSettings from "./components/background/MMBackgroundSettings";
 import {BackGroundContext} from './BackGroundContext';
 import dp from "./dp.png";
-import MMUniverse from "./components/background/MMUniverse";
+import MMUniverse from "./components/universe/MMUniverse";
 import MMPlanet from "./components/universe/MMPlanet";
+import MMRecipe from "./components/recipes/MMRecipe";
 
 function App() {
+
+    //todo: going back and forth to universe comps is loosing some memory and gets laggy after some time
+
     const [backGroundZIndex, setBackGroundZIndex] = useState(-1);
 
     const [colorFractal, setColorFractal] = useState([0.6, 0.176, 0.003]);
@@ -58,11 +61,12 @@ function App() {
                     <div className="content-wrapper">
                         <MMBody/>
                         <Routes>
-                            <Route path="/" element={<MMSorting/>}/>
+                            <Route path="/" element={<MMPerlinNoise/>}/>
                             <Route path="/sorting/bubblesort" element={<MMSorting/>}/>
                             <Route path="/noises/perlin" element={<MMPerlinNoise/>}/>
                             <Route path="/noises/planet" element={<MMPlanet/>}/>
                             <Route path="/universe" element={<MMUniverse/>}/>
+                            <Route path="/recipe" element={<MMRecipe/>}/>
                         </Routes>
                     </div>
                     <Footer/>

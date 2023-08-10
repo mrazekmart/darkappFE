@@ -83,6 +83,7 @@ const MMSorting = () => {
 
     return (
         <div className="mmContainerWrapper">
+            <h1 className="mmBodyHeader"> Bubble Sort </h1>
             <div className="mmContainer">
                 <div className="mmContainerTop">
                     <p className="mmLabel">Numbers: </p>
