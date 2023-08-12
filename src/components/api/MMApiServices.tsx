@@ -1,5 +1,6 @@
 import axios from 'axios';
 import {Recipe} from "../recipes/MMRecipe";
+import {MMDiscordInterface} from "../discord/MMDiscord";
 
 export const getUserProfileSettings = async (
     setColorFractal: (color: number[]) => void,
@@ -51,10 +52,34 @@ export const getRecipes = async (
     }
 };
 
+
 export const deleteRecipe = async (itemId: number) => {
+    const token = localStorage.getItem('jwt');
+    try {
+        await axios.delete(`/api/recipes/${itemId}`, {headers: {"Authorization": `Bearer ${token}`}});
+    } catch (error: any) {
+        console.log(error);
+        alert(`Error: ${error.response.data}`);
+    }
+};
+
+export const getDiscordMembers = async (
+    setItems: (item: MMDiscordInterface[]) => void
+) => {
     //const token = localStorage.getItem('jwt');
     try {
-        await axios.delete(`/api/recipes/${itemId}`);
+        const response = await axios.get(`/api/discord`);
+        if (response.data) {
+            let mmDiscords: MMDiscordInterface[] = [];
+            response.data.forEach(function (item: any) {
+                let discordMember: MMDiscordInterface = {
+                    discordName: item.discordName,
+                    discordTime: item.discordTime
+                }
+                mmDiscords.push(discordMember);
+            });
+            setItems(mmDiscords);
+        }
     } catch (error) {
         console.log(error);
     }

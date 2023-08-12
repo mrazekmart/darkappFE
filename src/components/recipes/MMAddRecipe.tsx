@@ -4,8 +4,8 @@ import axios from 'axios';
 const MMAddRecipe = () => {
 
     const [recipeName, setRecipeName] = useState<string>("");
-    const [recipeTemperature, setRecipeTemperature] = useState<number>();
-    const [recipeDuration, setRecipeDuration] = useState<number>();
+    const [recipeTemperature, setRecipeTemperature] = useState<string>("");
+    const [recipeDuration, setRecipeDuration] = useState<string>("");
     const [recipeNote, setRecipeNote] = useState<string>("");
     const [isPrivate, setIsPrivate] = useState<any>(false);
 
@@ -56,15 +56,15 @@ const MMAddRecipe = () => {
                 placeholder="Name"
             />
             <input
-                type="number"
+                type="text"
                 value={recipeTemperature}
-                onChange={e => setRecipeTemperature(Number(e.target.value))}
+                onChange={e => setRecipeTemperature(e.target.value)}
                 placeholder="Temperature"
             />
             <input
                 type="text"
                 value={recipeDuration}
-                onChange={e => setRecipeDuration(Number(e.target.value))}
+                onChange={e => setRecipeDuration(e.target.value)}
                 placeholder="Duration in minutes"
             />
             <input

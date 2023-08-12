@@ -15,6 +15,7 @@ import dp from "./dp.png";
 import MMUniverse from "./components/universe/MMUniverse";
 import MMPlanet from "./components/universe/MMPlanet";
 import MMRecipe from "./components/recipes/MMRecipe";
+import MMDiscord from "./components/discord/MMDiscord";
 
 function App() {
 
@@ -52,9 +53,14 @@ function App() {
                     <MMMandelBrot/>
                 </div>
                 <div className="container">
-                    <div className="d-flex flex-wrap mmBtn-container">
-                        <Header/>
-                        <MMProfile/>
+                    <div className="mmBtn-container">
+                        <div className="spacer"></div>
+                        <div>
+                            <Header/>
+                        </div>
+                        <div className="mmProfilePicturePosition">
+                            <MMProfile/>
+                        </div>
                         <MMBackgroundSettings/>
 
                     </div>
@@ -67,6 +73,7 @@ function App() {
                             <Route path="/noises/planet" element={<MMPlanet/>}/>
                             <Route path="/universe" element={<MMUniverse/>}/>
                             <Route path="/recipe" element={<MMRecipe/>}/>
+                            <Route path="/discord" element={<MMDiscord/>}/>
                         </Routes>
                     </div>
                     <Footer/>

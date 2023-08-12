@@ -20,19 +20,9 @@ const MMRecipe: React.FC = () => {
     }
     const handleInputFormShow = () => setInputFormShow(true);
 
-    const [items, setItems] = useState<Recipe[]>([
-        { recipeName: 'Example Field 1', recipeTemperature: 'Example Field 2', recipeDuration: 'Example Field 3', recipeNote: 'Example Field 4' , id: 1},
-    ]);
-
-    const addItem = () => {
-        setItems([...items, {recipeName: '', recipeTemperature: '', recipeDuration: '', recipeNote: '', id: 1}]);
-    }
+    const [items, setItems] = useState<Recipe[]>([]);
 
     const handleRemoveClick = (i: number) => {
-        //todo: Implement server side of delete
-        const values = [...items];
-        values.splice(i, 1);
-        setItems(values);
         deleteRecipe(items[i].id)
             .then(() => {
                 return getRecipes(setItems);
@@ -43,7 +33,7 @@ const MMRecipe: React.FC = () => {
     }
 
     useEffect(() => {
-        getRecipes(setItems)
+        getRecipes(setItems);
     }, []);
 
     return (
@@ -59,7 +49,7 @@ const MMRecipe: React.FC = () => {
                             <div className="mmRecipeItem">{item.recipeNote}</div>
                             <button
                                 onClick={() => handleRemoveClick(idx)}
-                                className="button delete-red"
+                                className="button mmDeleteButton"
                             >
                                 Delete
                             </button>

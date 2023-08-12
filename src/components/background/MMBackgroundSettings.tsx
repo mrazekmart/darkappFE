@@ -47,7 +47,7 @@ const MMBackgroundSettings = () => {
     }
 
     return(
-        <div style={{zIndex: backGroundZIndex * 2}} className="mmRegisterButtonsContainer">
+        <div style={{zIndex: backGroundZIndex * 2}} className="mmFractalsSettingsButtonsContainer">
             <div className="flex-direction-row flex-direction-row-space-10">
                 <div className="flex-direction-column">
                     <input className="mmPerlinSlider background-red"

@@ -21,14 +21,34 @@
 .mmUserProfileButton {
     background: transparent;
     border: none;
+    position: relative;
+}
+
+.mmUserProfileHoverText {
+    display: none;
+    position: absolute;
+    top: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 5px;
+    color: #58ffe3;
+}
+
+.mmUserProfileButton:hover .mmUserProfileHoverText {
+    display: block;
+}
+
+.spacer {
+    width: 380px;
 }
 
 .mmUserProfile {
     display: flex;
     flex-direction: column;
-    align-items: center;
     text-align: center;
-    margin-right: 20px;
+}
+
+.mmProfilePicturePosition {
 }
 
 .mmProfilePicture {
@@ -41,8 +61,7 @@
 
 .mmProfileContainer {
     display: flex;
-    flex-direction: column;
-    position: absolute;
+    flex-direction: row;
     right: 0;
 }
 
@@ -164,8 +183,8 @@
     align-items: center;
     border: 7px solid #ddd;
 }
+
 .mmRecipeItem {
-    width: 100%;
     padding-top: 12px;
     padding-bottom: 12px;
     font-size: 16px;
@@ -192,6 +211,12 @@
     display: flex;
     flex-direction: column;
     width: 800px;
+}
+
+.mmDeleteButton {
+    background: #e76161;
+    border: 1px solid black;
+    padding: 12px 0px;
 }
 
 
@@ -238,9 +263,9 @@
     text-align: center;
     position: relative;
     display: flex;
-    justify-content: center;
     align-items: center;
     flex-direction: row;
+    justify-content: space-between;
 }
 
 .mmScience-btn {
@@ -274,7 +299,7 @@
     background-color: #601111;
 }
 
-.mmRegisterButtonsContainer {
+.mmFractalsSettingsButtonsContainer {
     display: flex;
     flex-direction: column;
     position: absolute;
@@ -282,10 +307,18 @@
     margin-right: 45px;
 }
 
+.mmRegisterButtonsContainer {
+    display: flex;
+    flex-direction: row;
+    align-content: start;
+}
+
 .mmRegisterButton {
-    font-size: 12px;
-    margin-top: 5px;
-    width: 100px;
+    font-size: 10px;
+    margin: 5px;
+    width: 80px;
+    height: 25px;
+    padding: 0;
 }
 
 .mmRegisterToLoginButton {
@@ -537,6 +570,7 @@
 .background-red {
     background: red;
 }
+
 .delete-red {
     background: #e76161;
 }
