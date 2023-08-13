@@ -41,7 +41,7 @@ const MMBody = () => {
                     title="MMPlayGround"
                     menuItems={[
                         {label: 'Air fryer recipes', path: '/recipe'},
-                        {label: 'Discord Time', path: '/discord'},
+                        {label: 'Discord Nerds', path: '/discord'},
                     ]}
                 />
                 <button className="mmScience-btn mmCustomizeBackground-btn"

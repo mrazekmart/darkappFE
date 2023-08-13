@@ -642,18 +642,37 @@ const MMUniverse = () => {
     }
 
     return (
-        <div style={{position: "relative"}}>
-            <canvas ref={canvasRef} onMouseMove={handleMousePos} style={{position: "fixed", top: 0, left: 0}}/>
+        <div>
+            <div style={{position: "relative"}}>
+                <canvas ref={canvasRef} onMouseMove={handleMousePos} style={{position: "fixed", top: 0, left: 0}}/>
 
-            {tooltipVisible && (<span
-                className="tooltip"
-                style={{
-                    left: `${mousePos.x}px`,
-                    top: `${mousePos.y - 320}px`
-                }}
-            >
-            {tooltipText}
-            </span>)}
+                {tooltipVisible && (<span
+                    className="tooltip"
+                    style={{
+                        left: `${mousePos.x}px`,
+                        top: `${mousePos.y - 320}px`
+                    }}
+                >
+                {tooltipText}
+                </span>)}
+            </div>
+            <div className="mmOverlayControls">
+                <p className="mmOverlayControls header">
+                    Control Buttons <br />
+                    mouse to rotate
+                </p>
+                <div className="mmOverlayControls">
+                    <button className="arrow up" disabled>W</button>
+                    <div className="middle-arrows">
+                        <button className="arrow left" disabled>A</button>
+                        <button className="arrow down" disabled>S</button>
+                        <button className="arrow right" disabled>D</button>
+                    </div>
+                </div>
+                <div className="mmOverlayControls shift">
+                    <button className="arrow shift" disabled>Shift</button>
+                </div>
+            </div>
         </div>
     );
 }

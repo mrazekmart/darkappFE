@@ -1,3 +1,59 @@
+/* !!! UNIVERSE !!! */
+.mmOverlayControls {
+    display: flex;
+    z-index: 2;
+    flex-direction: column;
+    max-width: 200px;
+}
+
+.mmOverlayControls.header {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+    color: #58ffe3;
+}
+
+.arrow {
+    background-color: rgba(255, 255, 255, 0.7);
+    border: none;
+    padding: 10px 20px;
+    font-size: 20px;
+    cursor: pointer;
+    margin: 5px;
+    transition: background-color 0.3s;
+}
+
+/*.arrow:hover {*/
+/*    background-color: rgba(255, 255, 255, 1);*/
+/*}*/
+
+.middle-arrows {
+    display: flex;
+    align-items: center;
+}
+
+.arrow.up {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.arrow.down {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.arrow.left {
+    margin-right: 10px;
+}
+
+.arrow.right {
+    margin-left: 10px;
+}
+
+/**/
+
 .hoverable {
     position: relative;
 }
@@ -589,4 +645,9 @@
 
 .min-width-800 {
     min-width: 800px;
+}
+
+button[disabled] {
+    color: inherit;
+    cursor: default;
 }
