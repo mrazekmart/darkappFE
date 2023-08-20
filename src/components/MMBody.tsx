@@ -42,6 +42,8 @@ const MMBody = () => {
                     menuItems={[
                         {label: 'Air fryer recipes', path: '/recipe'},
                         {label: 'Discord Nerds', path: '/discord'},
+                        {label: 'MMTD', path: '/mmtd'},
+                        {label: 'MMTDGridMaker', path: '/mmtdgm'},
                     ]}
                 />
                 <button className="mmScience-btn mmCustomizeBackground-btn"

@@ -141,6 +141,8 @@ const MMUniverse = () => {
 
     useEffect(() => {
 
+        console.log("entering useeffect universe");
+
         const canvas = canvasRef.current;
 
         if (!canvas) return;
@@ -154,6 +156,8 @@ const MMUniverse = () => {
         if (!solarSystem) return;
 
         if (loading) return;
+
+        console.log("rendering useeffect universe");
 
         renderSolarSystem(solarSystem, canvas);
 

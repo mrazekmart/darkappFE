@@ -16,6 +16,8 @@ import MMUniverse from "./components/universe/MMUniverse";
 import MMPlanet from "./components/universe/MMPlanet";
 import MMRecipe from "./components/recipes/MMRecipe";
 import MMDiscord from "./components/discord/MMDiscord";
+import MMTDGameManager from "./components/mmtd/MMTDGameManager";
+import MMTDGridMakerManager from "./components/mmtd/grid/maker/MMTDGridMakerManager";
 
 function App() {
 
@@ -74,6 +76,8 @@ function App() {
                             <Route path="/universe" element={<MMUniverse/>}/>
                             <Route path="/recipe" element={<MMRecipe/>}/>
                             <Route path="/discord" element={<MMDiscord/>}/>
+                            <Route path="/mmtd" element={<MMTDGameManager/>}/>
+                            <Route path="/mmtdgm" element={<MMTDGridMakerManager/>}/>
                         </Routes>
                     </div>
                     <Footer/>

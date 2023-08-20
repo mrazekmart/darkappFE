@@ -27,7 +27,7 @@ module.exports = {
     plugins: [
         new HtmlWebpackPlugin({template: './public/index.html'})
     ],
-    devtool: "source-map",
+    devtool: "source-map.json",
     devServer: {
         contentBase: './dist/',
     },
