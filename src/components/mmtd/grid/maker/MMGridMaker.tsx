@@ -5,7 +5,7 @@ import {MMGridType} from "../MMGridMesh";
 import {MMPathFinder} from "../pathfinding/MMPathFinder";
 import {MMEnemyManager} from "../../gameObjects/enemies/MMEnemyManager";
 import {MMTDSceneManager} from "../../MMTDSceneManager";
-import {MMProjectileManager} from "../../gameObjects/projectiles/MMProjectileManager";
+import {MMProjectileManager, MMProjectileType} from "../../gameObjects/projectiles/MMProjectileManager";
 import {MMTowerManager} from "../../gameObjects/tower/MMTowerManager";
 
 export interface MMCellJson {
@@ -140,6 +140,7 @@ export function initializeThreeGrid(containerID: string, size: number): void {
                 isPlacingTower = false;
             }
             if (mesh.name === "placetower") {
+                //this is compromised
                 isPlacingTower = !isPlacingTower;
                 isPlacingEnemy = false;
             }
@@ -158,9 +159,20 @@ export function initializeThreeGrid(containerID: string, size: number): void {
             if (isPlacingTower) {
                 if (!intersectedCustomObject) return;
 
-                if (intersectedCustomObject.gridMesh.gridType === MMGridType.Ground) {
-                    MMTowerManager.getInstance().createTower(1, intersectedCustomObject.gridPosition, intersectedCustomObject.gridMesh.mesh.position);
+                if (intersectedCustomObject.gridMesh.gridType === MMGridType.Road) {
+
+                    let randomX = Math.random() * 60 - 30;
+                    let randomY = Math.random() * 60 - 30;
+                    const place = intersectedCustomObject.gridMesh.mesh.position.clone();
+                    place.x += randomX;
+                    place.y += randomY;
+                    MMProjectileManager.getInstance().createProjectile(
+                        MMProjectileType.GravityShaper, place);
                 }
+                // if (intersectedCustomObject.gridMesh.gridType === MMGridType.Ground) {
+                //     MMTowerManager.getInstance().createTower(1, intersectedCustomObject.gridPosition, intersectedCustomObject.gridMesh.mesh.position);
+                // }
+
 
                 return;
             }

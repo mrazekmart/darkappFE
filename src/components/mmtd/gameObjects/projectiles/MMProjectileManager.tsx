@@ -3,10 +3,12 @@ import {Vector3} from "three";
 import {MMBasicProjectile} from "./projectiles/MMBasicProjectile";
 import {MMSlowingProjectile} from "./projectiles/MMSlowingProjectile";
 import {MMAEnemy} from "../enemies/MMAEnemy";
+import {MMGravityShaperProjectile} from "./projectiles/MMGravityShaperProjectile";
 
 export enum MMProjectileType {
     BasicBullet,
-    SlowingLaser
+    SlowingLaser,
+    GravityShaper
 }
 
 export class MMProjectileManager {
@@ -25,17 +27,20 @@ export class MMProjectileManager {
         return this.instance;
     }
 
-    createProjectile(projectileType: number, position: Vector3, target: MMAEnemy) : MMAProjectile | undefined{
+    createProjectile(projectileType: number, position: Vector3, target?: MMAEnemy) : MMAProjectile | undefined{
         let projectile;
         switch (projectileType) {
             case MMProjectileType.BasicBullet:
-                projectile = new MMBasicProjectile(position, target.mesh.position);
+                projectile = new MMBasicProjectile(position, target!.mesh.position);
                 break;
             case MMProjectileType.SlowingLaser:
-                projectile = new MMSlowingProjectile(position, target);
+                projectile = new MMSlowingProjectile(position, target!);
+                break;
+            case MMProjectileType.GravityShaper:
+                projectile = new MMGravityShaperProjectile(position);
                 break;
             default:
-                projectile = new MMBasicProjectile(position, target.mesh.position);
+                projectile = new MMBasicProjectile(position, target!.mesh.position);
                 break;
         }
         if (projectile) this.addProjectile(projectile);

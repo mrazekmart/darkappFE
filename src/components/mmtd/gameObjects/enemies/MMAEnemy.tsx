@@ -23,6 +23,13 @@ export class MMAEnemy extends MMAGameObject {
         }
     }
 
+    addForce(force: Vector3){
+        this.mesh.position.add(force);
+        this.healthBarMesh.position.add(force);
+        //FIXME this is not a good idea
+        this.calculateNewPath = true;
+    }
+
     takeDamage(damage: number) {
         this.health -= damage;
         if (this.health <= 0) {

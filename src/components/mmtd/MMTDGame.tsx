@@ -5,14 +5,13 @@ import {MMPathFinder} from "./grid/pathfinding/MMPathFinder";
 import {MMGridCell} from "./grid/MMGridCell";
 import {MMEnemyManager} from "./gameObjects/enemies/MMEnemyManager";
 import {MMTDSceneManager} from "./MMTDSceneManager";
-import {MMGridType} from "./grid/MMGridMesh";
 import {MMTowerManager} from "./gameObjects/tower/MMTowerManager";
 import {MMBuilderMode} from "./builder/MMBuilderMode";
 import {MMProjectileManager} from "./gameObjects/projectiles/MMProjectileManager";
 
 
-export const CANVAS_WIDTH = window.innerWidth;
-export const CANVAS_HEIGHT = window.innerHeight;
+export const CANVAS_WIDTH = 2560;
+export const CANVAS_HEIGHT = 1332;
 export const GRID_SIZE_WIDTH = 32;
 export const GRID_SIZE_HEIGHT = 18;
 
@@ -88,6 +87,15 @@ export function initializeThreeGrid(containerID: string): void {
     };
 
 
+    // resize, maybe some day
+    //
+    // window.addEventListener('resize', () => {
+    //     let width = window.innerWidth;
+    //     let height = window.innerHeight;
+    //     renderer.setSize(width, height);
+    //     camera.aspect = width / height;
+    //     camera.updateProjectionMatrix();
+    // });
     document.addEventListener('click', onClick);
 
 

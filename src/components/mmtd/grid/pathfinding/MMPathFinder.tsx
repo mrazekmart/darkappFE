@@ -207,7 +207,6 @@ export class MMPathFinder {
 
         while (node) {
             if (visited.has(node)) {
-                console.error('Cycle detected in node relationships.');
                 break;
             }
 
