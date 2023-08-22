@@ -42,12 +42,7 @@ export class MMGravityShaperTower extends MMATower {
                 this.target = undefined;
                 return;
             }
-            let randomX = Math.random() * 60 - 30;
-            let randomY = Math.random() * 60 - 30;
-            const place = this.target.mesh.position.clone();
-            place.x += randomX;
-            place.y += randomY;
-            MMProjectileManager.getInstance().createProjectile(MMProjectileType.GravityShaper, place);
+            MMProjectileManager.getInstance().createProjectile(MMProjectileType.GravityShaper, this.weaponMesh.position, this.target);
             this.timeToShoot -= 1 / this.weaponFireRate;
         }
     }

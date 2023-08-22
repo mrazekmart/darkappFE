@@ -6,7 +6,8 @@ export class MMBasicEnemy extends MMAEnemy {
 
     constructor(position: Vector3) {
         super();
-        const geometry = new THREE.BoxGeometry(30, 30, 30);
+        this.size = new Vector3(30, 30, 30)
+        const geometry = new THREE.BoxGeometry(this.size.x, this.size.y, this.size.z);
         const material = new THREE.MeshBasicMaterial({color: 0x000000});
         this.mesh = new THREE.Mesh(geometry, material);
         this.mesh.position.set(position.x, position.y, position.z);

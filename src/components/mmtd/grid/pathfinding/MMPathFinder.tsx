@@ -1,8 +1,8 @@
-import {MMGridManager} from "../MMGridManager";
 import {MMGridType} from "../MMGridMesh";
-import {Vector2, Vector3} from "three";
-import {CANVAS_HEIGHT, CANVAS_WIDTH, CELL_HEIGHT, CELL_WIDTH, GRID_SIZE_HEIGHT, GRID_SIZE_WIDTH} from "../../MMTDGame";
+import {Vector3} from "three";
+import {CELL_HEIGHT, CELL_WIDTH, GRID_SIZE_HEIGHT, GRID_SIZE_WIDTH} from "../../MMTDGame";
 import {MMGridCell} from "../MMGridCell";
+import {gridPositionFromVector} from "../../util/MMMathUtil";
 
 /**
  * The MMPathFinder class provides functionalities to find the shortest path
@@ -151,13 +151,8 @@ export class MMPathFinder {
         if (!this.endNode.center) return null;
         if (!end) end = this.endNode.center;
 
-        const startNode = new Vector2(
-            Math.round((start.x + CANVAS_WIDTH / 2 - CELL_WIDTH / 2) / CELL_WIDTH),
-            Math.round((-start.y + CANVAS_HEIGHT / 2 - CELL_HEIGHT / 2) / CELL_HEIGHT));
-
-        const endNode = new Vector2(
-            Math.round((end.x + CANVAS_WIDTH / 2 - CELL_WIDTH / 2) / CELL_WIDTH),
-            Math.round((-end.y + CANVAS_HEIGHT / 2 - CELL_HEIGHT / 2) / CELL_HEIGHT));
+        const startNode = gridPositionFromVector(start);
+        const endNode = gridPositionFromVector(end);
 
         return this.findPath(this.grid[startNode.x][startNode.y], this.grid[endNode.x][endNode.y]);
     }

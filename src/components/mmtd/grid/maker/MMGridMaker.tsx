@@ -159,19 +159,19 @@ export function initializeThreeGrid(containerID: string, size: number): void {
             if (isPlacingTower) {
                 if (!intersectedCustomObject) return;
 
-                if (intersectedCustomObject.gridMesh.gridType === MMGridType.Road) {
-
-                    let randomX = Math.random() * 60 - 30;
-                    let randomY = Math.random() * 60 - 30;
-                    const place = intersectedCustomObject.gridMesh.mesh.position.clone();
-                    place.x += randomX;
-                    place.y += randomY;
-                    MMProjectileManager.getInstance().createProjectile(
-                        MMProjectileType.GravityShaper, place);
-                }
-                // if (intersectedCustomObject.gridMesh.gridType === MMGridType.Ground) {
-                //     MMTowerManager.getInstance().createTower(1, intersectedCustomObject.gridPosition, intersectedCustomObject.gridMesh.mesh.position);
+                // if (intersectedCustomObject.gridMesh.gridType === MMGridType.Road) {
+                //
+                //     let randomX = Math.random() * 60 - 30;
+                //     let randomY = Math.random() * 60 - 30;
+                //     const place = intersectedCustomObject.gridMesh.mesh.position.clone();
+                //     place.x += randomX;
+                //     place.y += randomY;
+                //     MMProjectileManager.getInstance().createProjectile(
+                //         MMProjectileType.GravityShaper, place);
                 // }
+                if (intersectedCustomObject.gridMesh.gridType === MMGridType.Ground) {
+                    MMTowerManager.getInstance().createTower(1, intersectedCustomObject.gridPosition, intersectedCustomObject.gridMesh.mesh.position);
+                }
 
 
                 return;

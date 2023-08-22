@@ -8,17 +8,14 @@ export enum MMGameObjectType {
  * Represents an abstract game object for a MMTD game.
  * This class should not be instantiated directly but should be inherited by other specific game objects.
  */
-export class MMAGameObject {
+export abstract class MMAGameObject {
 
     /**
      * Constructs an instance of MMAGameObject.
      *
      * Throws an error if an attempt is made to instantiate this abstract class directly.
      */
-    constructor() {
-        if (new.target === MMAGameObject) {
-            throw new Error("Cannot instantiate abstract class GameObject");
-        }
+    protected constructor() {
     }
 
     /**

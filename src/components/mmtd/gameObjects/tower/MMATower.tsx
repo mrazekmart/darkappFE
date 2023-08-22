@@ -6,7 +6,7 @@ import {MMEnemyManager} from "../enemies/MMEnemyManager";
 import {MMTDSceneManager} from "../../MMTDSceneManager";
 import {MMAEnemy} from "../enemies/MMAEnemy";
 
-export class MMATower extends MMAGameObject {
+export abstract class MMATower extends MMAGameObject {
 
     buildingMesh!: THREE.Mesh;
     weaponMesh!: THREE.Mesh;
@@ -16,11 +16,8 @@ export class MMATower extends MMAGameObject {
     weaponRange: number = 200;
 
 
-    constructor() {
+    protected constructor() {
         super();
-        if (new.target === MMATower) {
-            throw new Error("Cannot instantiate abstract class MMATower");
-        }
     }
 
     update(deltaTime: number) {

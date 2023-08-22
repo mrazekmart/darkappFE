@@ -37,7 +37,7 @@ export class MMProjectileManager {
                 projectile = new MMSlowingProjectile(position, target!);
                 break;
             case MMProjectileType.GravityShaper:
-                projectile = new MMGravityShaperProjectile(position);
+                projectile = new MMGravityShaperProjectile(position, target!.mesh.position);
                 break;
             default:
                 projectile = new MMBasicProjectile(position, target!.mesh.position);

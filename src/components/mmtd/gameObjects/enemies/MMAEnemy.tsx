@@ -6,30 +6,49 @@ import {MMTDSceneManager} from "../../MMTDSceneManager";
 import {MMAGameObject} from "../MMAGameObject";
 import {MMEnemyManager} from "./MMEnemyManager";
 import {MMTowerManager} from "../tower/MMTowerManager";
+import {MMGridManager} from "../../grid/MMGridManager";
+import {MMGridType} from "../../grid/MMGridMesh";
+import {gridPositionFromVector} from "../../util/MMMathUtil";
 
-export class MMAEnemy extends MMAGameObject {
+/**
+ * Represents an enemy entity in the game with movement, health, and pathfinding capabilities.
+ * The MMAEnemy is an abstract class that must be extended by specific enemy types.
+ */
+export abstract class MMAEnemy extends MMAGameObject {
     mesh!: THREE.Mesh;
     healthBarMesh!: THREE.Mesh;
     path!: MMNode[] | null;
     calculateNewPath: boolean = true;
+    size!: Vector3;
 
     health: number = 100;
     speed: number = 50;
 
-    constructor() {
+    private readonly gridManager = MMGridManager.getInstance();
+    private readonly sceneManager = MMTDSceneManager.getInstance();
+
+    protected constructor() {
         super();
-        if (new.target === MMAEnemy) {
-            throw new Error("Cannot instantiate abstract class MMAEnemy");
-        }
     }
 
-    addForce(force: Vector3){
+    /**
+     * Apply a force to the enemy, modifying its position.
+     * @param force - The vector direction and magnitude of the force.
+     */
+    addForce(force: Vector3) {
+        //don't push it out of the road
+        if (this.outOfRoad(force)) return;
+
         this.mesh.position.add(force);
         this.healthBarMesh.position.add(force);
         //FIXME this is not a good idea
         this.calculateNewPath = true;
     }
 
+    /**
+     * Inflict damage on the enemy, reducing its health.
+     * @param damage - Amount of damage to apply.
+     */
     takeDamage(damage: number) {
         this.health -= damage;
         if (this.health <= 0) {
@@ -37,6 +56,9 @@ export class MMAEnemy extends MMAGameObject {
         }
     }
 
+    /**
+     * Destroy the enemy entity and perform necessary cleanup.
+     */
     destroy() {
         this.removeMeFromScene();
         //don't know if this does something
@@ -46,12 +68,16 @@ export class MMAEnemy extends MMAGameObject {
         MMTowerManager.getInstance().targetDead(this);
     }
 
+    /**
+     * Update the enemy's state for each frame.
+     * This includes pathfinding and movement logic.
+     * @param deltaTime - The time elapsed since the last frame.
+     */
     update(deltaTime: number) {
         if (this.calculateNewPath) {
             this.path = MMPathFinder.getInstance().findPathByPosition(this.mesh.position);
             this.calculateNewPath = false;
         }
-
 
         if (!this.path || this.path.length === 0) return;
 
@@ -70,19 +96,56 @@ export class MMAEnemy extends MMAGameObject {
         this.updateHealthBar();
     }
 
+    /**
+     * Add the enemy and its associated health bar to the scene.
+     */
     addMeToScene() {
-        MMTDSceneManager.getInstance().addToScene(this.mesh);
-        MMTDSceneManager.getInstance().addToScene(this.healthBarMesh);
+        this.sceneManager.addToScene(this.mesh);
+        this.sceneManager.addToScene(this.healthBarMesh);
     }
 
+    /**
+     * Remove the enemy and its associated health bar from the scene.
+     */
     removeMeFromScene() {
-        MMTDSceneManager.getInstance().removeFromScene(this.mesh);
-        MMTDSceneManager.getInstance().removeFromScene(this.healthBarMesh);
+        this.sceneManager.removeFromScene(this.mesh);
+        this.sceneManager.removeFromScene(this.healthBarMesh);
     }
 
+    /**
+     * Update the visual representation of the enemy's health bar.
+     */
     updateHealthBar() {
-        this.healthBarMesh.scale.x = this.health / 100;
-        const position = this.mesh.position;
-        this.healthBarMesh.position.set(position.x, position.y + 30, position.z);
+        const {x, y, z} = this.mesh.position;
+        this.healthBarMesh.position.set(x, y + 30, z);
+    }
+
+
+    private _newPosition = new THREE.Vector3();
+
+    /**
+     * todo: consider moving this somewhere else, maybe util class
+     * Check if the given force would push the enemy out of the road.
+     * @param force - The vector direction and magnitude of the force.
+     * @returns - True if the force pushes the enemy off-road, false otherwise.
+     */
+    outOfRoad(force: Vector3): boolean {
+        this._newPosition.copy(this.mesh.position).add(force);
+
+        const offsets = [
+            new Vector3(-this.size.x / 2, this.size.y / 2, 0),
+            new Vector3(-this.size.x / 2, -this.size.y / 2, 0),
+            new Vector3(this.size.x / 2, this.size.y / 2, 0),
+            new Vector3(this.size.x / 2, -this.size.y / 2, 0)
+        ];
+
+        for (let offset of offsets) {
+            const gridPosition = gridPositionFromVector(this._newPosition.clone().add(offset));
+            if (this.gridManager.grid[gridPosition.x][gridPosition.y].gridMesh.gridType !== MMGridType.Road) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
