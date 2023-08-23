@@ -6,7 +6,7 @@ export class MMWaveManager {
     private static instance: MMWaveManager;
 
     waves: number[][] = [
-        [20, 2], [10, 1], [30, 3]
+        [40, 0.5], [10, 1], [30, 3]
     ]
     wave: number = 0;
 

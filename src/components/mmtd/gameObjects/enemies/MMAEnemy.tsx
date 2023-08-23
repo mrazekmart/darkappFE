@@ -7,8 +7,6 @@ import {MMAGameObject} from "../MMAGameObject";
 import {MMEnemyManager} from "./MMEnemyManager";
 import {MMTowerManager} from "../tower/MMTowerManager";
 import {MMGridManager} from "../../grid/MMGridManager";
-import {MMGridType} from "../../grid/MMGridMesh";
-import {gridPositionFromVector} from "../../util/MMMathUtil";
 
 /**
  * Represents an enemy entity in the game with movement, health, and pathfinding capabilities.
@@ -37,7 +35,7 @@ export abstract class MMAEnemy extends MMAGameObject {
      */
     addForce(force: Vector3) {
         //don't push it out of the road
-        if (this.outOfRoad(force)) return;
+        if (this.gridManager.outOfRoad(this.mesh.position, this.size, force)) return;
 
         this.mesh.position.add(force);
         this.healthBarMesh.position.add(force);
@@ -118,34 +116,5 @@ export abstract class MMAEnemy extends MMAGameObject {
     updateHealthBar() {
         const {x, y, z} = this.mesh.position;
         this.healthBarMesh.position.set(x, y + 30, z);
-    }
-
-
-    private _newPosition = new THREE.Vector3();
-
-    /**
-     * todo: consider moving this somewhere else, maybe util class
-     * Check if the given force would push the enemy out of the road.
-     * @param force - The vector direction and magnitude of the force.
-     * @returns - True if the force pushes the enemy off-road, false otherwise.
-     */
-    outOfRoad(force: Vector3): boolean {
-        this._newPosition.copy(this.mesh.position).add(force);
-
-        const offsets = [
-            new Vector3(-this.size.x / 2, this.size.y / 2, 0),
-            new Vector3(-this.size.x / 2, -this.size.y / 2, 0),
-            new Vector3(this.size.x / 2, this.size.y / 2, 0),
-            new Vector3(this.size.x / 2, -this.size.y / 2, 0)
-        ];
-
-        for (let offset of offsets) {
-            const gridPosition = gridPositionFromVector(this._newPosition.clone().add(offset));
-            if (this.gridManager.grid[gridPosition.x][gridPosition.y].gridMesh.gridType !== MMGridType.Road) {
-                return true;
-            }
-        }
-
-        return false;
     }
 }
