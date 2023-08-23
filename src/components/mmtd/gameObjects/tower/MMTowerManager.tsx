@@ -4,11 +4,13 @@ import {MMATower} from "./MMATower";
 import {MMBasicTower} from "./towers/MMBasicTower";
 import {MMSlowingTower} from "./towers/MMSlowingTower";
 import {MMGravityShaperTower} from "./towers/MMGravityShaperTower";
+import {MMTeslaCoilTower} from "./towers/MMTeslaCoilTower";
 
 export enum MMTowerType {
     BasicTower,
     SlowingTower,
-    GravityShaperTower
+    GravityShaperTower,
+    LightingStrikeTower,
 }
 
 export class MMTowerManager {
@@ -44,7 +46,10 @@ export class MMTowerManager {
                 tower = new MMSlowingTower(gridPosition, position);
                 break;
             case MMTowerType.GravityShaperTower:
-                tower = new MMGravityShaperTower(gridPosition, position)
+                tower = new MMGravityShaperTower(gridPosition, position);
+                break;
+            case MMTowerType.LightingStrikeTower:
+                tower = new MMTeslaCoilTower(gridPosition, position);
                 break;
             default:
                 tower = new MMBasicTower(gridPosition, position);
