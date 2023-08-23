@@ -4,10 +4,6 @@ import {Vector2, Vector3} from "three";
 
 export class MMBasicTower extends MMATower {
 
-    weaponFireRate: number = 2; // shots per sec
-    timeToShoot: number = 1 / this.weaponFireRate;
-
-
     constructor(gridPosition: Vector2, position: Vector3) {
         super();
         this.gridPosition = gridPosition;
