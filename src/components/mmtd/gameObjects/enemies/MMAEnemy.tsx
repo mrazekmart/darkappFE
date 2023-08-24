@@ -110,10 +110,12 @@ export abstract class MMAEnemy extends MMAGameObject {
         this.sceneManager.removeFromScene(this.healthBarMesh);
     }
 
+    
     /**
      * Update the visual representation of the enemy's health bar.
      */
     updateHealthBar() {
+        this.healthBarMesh.scale.x = this.health / 100;
         const {x, y, z} = this.mesh.position;
         this.healthBarMesh.position.set(x, y + 30, z);
     }

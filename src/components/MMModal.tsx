@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useEffect, useRef } from 'react';
+import {useEffect, useRef} from 'react';
 
 interface MMModalProps {
     handleClose: () => void;
@@ -7,7 +7,7 @@ interface MMModalProps {
     children: any;
 }
 
-const MMModal = ({ handleClose, show, children } : MMModalProps) => {
+const MMModal = ({handleClose, show, children}: MMModalProps) => {
     const modalRef = useRef<HTMLDivElement>(null);
     const showHideClassName = show ? "mmModal display-block" : "mmModal display-none";
 

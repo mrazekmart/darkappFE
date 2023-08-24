@@ -7,14 +7,17 @@ export class MMTeslaCoilTower extends MMATower {
 
     weaponMesh: THREE.Mesh
 
+    weaponFireRate: number = 0.4;
+
     constructor(gridPosition: Vector2, position: Vector3) {
         super();
         this.gridPosition = gridPosition;
 
-        const buildingGeometry = new THREE.CylinderGeometry(40, 20, 6);
+        const buildingGeometry = new THREE.CircleGeometry(30, 5);
         const buildingMaterial = new THREE.MeshBasicMaterial({color: 0x0000FF});
         const buildingMesh = new THREE.Mesh(buildingGeometry, buildingMaterial);
         buildingMesh.position.set(position.x, position.y, position.z);
+        buildingMesh.rotation.z = -Math.PI / 2;
         this.meshes.push(buildingMesh);
 
         const weaponGeometry = new THREE.BoxGeometry(15, 15, 15);

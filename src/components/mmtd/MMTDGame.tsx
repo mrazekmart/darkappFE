@@ -35,7 +35,7 @@ export function initializeThreeGrid(containerID: string): void {
 
 
     const renderer: THREE.WebGLRenderer = new THREE.WebGLRenderer({antialias: true});
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setSize(canvasWidth, canvasHeight);
     document.getElementById(containerID)!.appendChild(renderer.domElement);
 
 

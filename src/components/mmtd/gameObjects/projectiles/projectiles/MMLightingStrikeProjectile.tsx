@@ -14,6 +14,8 @@ export class MMLightingStrikeProjectile extends MMAProjectile {
 
     sceneManager = MMTDSceneManager.getInstance();
 
+    damage = 50;
+
     constructor(position: Vector3, targetEnemy: MMAEnemy) {
         super();
         this.position = position;
@@ -21,25 +23,26 @@ export class MMLightingStrikeProjectile extends MMAProjectile {
 
         const material = new THREE.LineBasicMaterial({color: 0xFFFFFF, linewidth: 2});
 
-        let lightningSegments: Segment[] = this.createLightningSegment(this.position, targetEnemy.mesh.position, 2, 3);
+        let lightningSegments: Segment[] = this.createLightningSegment(this.position, targetEnemy.mesh.position, 30, 3);
 
         lightningSegments.forEach(segment => {
             const geometry = new THREE.BufferGeometry().setFromPoints(segment);
             const line = new THREE.Line(geometry, material);
             this.lightningSegments.push(line);
         });
+        this.addMeToScene();
+        targetEnemy.takeDamage(this.damage);
     }
 
-    counter = 0;
+    time = 0;
 
     update(deltaTime: number) {
-        this.counter++;
-        //todo: make this with deltaTime
-        if (this.counter > 1000) {
+        this.time += deltaTime;
+        if (this.time > 0.25) {
             this.lightningSegments.forEach((segment: THREE.Line) => {
                 this.sceneManager.removeFromScene(segment);
             });
-            this.counter = 0;
+            this.time = 0;
         }
     }
 
@@ -64,7 +67,7 @@ export class MMLightingStrikeProjectile extends MMAProjectile {
         let midpoint = new THREE.Vector3().lerpVectors(start, end, 0.5);
         midpoint.x += (Math.random() - 0.5) * jitterAmount;
         midpoint.y += (Math.random() - 0.5) * jitterAmount;
-        midpoint.z += (Math.random() - 0.5) * jitterAmount;
+        //midpoint.z += (Math.random() - 0.5) * jitterAmount;
 
         let firstHalf: Segment = [start, midpoint];
         let secondHalf: Segment = [midpoint, end];
@@ -76,7 +79,7 @@ export class MMLightingStrikeProjectile extends MMAProjectile {
             let branchEnd = midpoint.clone();
             branchEnd.x += (Math.random() - 0.5) * jitterAmount;
             branchEnd.y += (Math.random() - 0.5) * jitterAmount;
-            branchEnd.z += (Math.random() - 0.5) * jitterAmount;
+            //branchEnd.z += (Math.random() - 0.5) * jitterAmount;
             segments.push([midpoint, branchEnd]);
 
             segments = segments.concat(this.createLightningSegment(midpoint, branchEnd, jitterAmount * 0.5, depth - 1));

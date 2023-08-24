@@ -53,7 +53,9 @@ export class MMProjectileManager {
     }
 
     deleteProjectile(projectileToDelete: MMAProjectile) {
-        this.projectiles = this.projectiles.filter((projectile: MMAProjectile) => projectile.projectileMesh.id !== projectileToDelete.projectileMesh.id);
+        if (projectileToDelete) {
+            this.projectiles = this.projectiles.filter((projectile: MMAProjectile) => projectile.projectileMesh.id !== projectileToDelete.projectileMesh.id);
+        }
     }
 
     updateProjectiles(deltaTime: number) {
